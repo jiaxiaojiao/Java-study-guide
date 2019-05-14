@@ -25,6 +25,15 @@ Tomcat就可以根据JAVA_HOME找到JDK，然后启动了。（Tomcat依赖于ja
 3. 配置端口。 进入conf目录，编辑server.xml配置文件。
 <Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443" />
 
+4. 配置web应用。
+<Host name="localhost"  appBase="webapps" unpackWARs="true" autoDeploy="true">
+在Server.xml的<Host>标签中，添加<Context/>标签
+<Context path="/news" docBase="E:\news" />
+或放到缺省目录下： 将文件夹放到 Tomcat/webapps下
+
+5. war包发送到webapps下，war文件会自动解压，可以直接被访问。
+
+
 ```
 
 ### 端口占用问题
