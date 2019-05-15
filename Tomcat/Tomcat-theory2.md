@@ -115,6 +115,11 @@ ContextConfig 解析 web.xml 顺序：
 #### Servlet 生命周期
 ![image](./image/tomcat-2-7.jpeg)
 
+
+
+https://www.jianshu.com/p/c94dc6c64ec5
+
+
 Servlet 是用 Java 编写的服务器端程序。其主要功能在于交互式地浏览和修改数据，生成动态 Web 内容。
 
 1. 请求到达 server 端，server 根据 url 映射到相应的 Servlet
