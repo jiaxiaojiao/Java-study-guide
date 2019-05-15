@@ -21,6 +21,7 @@ Tomcat就可以根据JAVA_HOME找到JDK，然后启动了。（Tomcat依赖于ja
 2. 设置 CATALINA_HOME 为 Tomcat安装路径。
 这个环境变量能够让Tomcat在该变量所配置的目录来启动。
 可以不配置，如果配置startup.bat根据CATALINA_HOME变量启动Tomcat
+设置PATH 添加变量值：%CATALINA_HOME%\lib;%CATALINA_HOME%\bin
 
 3. 配置端口。 进入conf目录，编辑server.xml配置文件。
 <Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443" />
@@ -59,4 +60,12 @@ webapps —— web应用所在目录，供外界访问的web资源的存放目�
 work —— Tomcat的工作目录。
 
 ```
-Tomcat 原理 运行机制 性能优化 配置
+
+## Tomcat 原理及架构
+> 一个Tomcat中只有一个Server，一个Server可以包含多个Service，一个Service只有一个Container，但是可以有多个Connectors，这是因为一个服务可以有多个连接，如同时提供Http和Https链接，也可以提供向相同协议不同端口的连接
+Tomcat中最顶层的容器是Server，代表着整个服务器。
+
+[Tomcat原理及架构](/Tomcat/Tomcat-theory.md)
+
+
+Tomcat 原理 运行机制 性能优化
