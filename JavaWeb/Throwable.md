@@ -1,4 +1,5 @@
 # 异常 Throwable
+![image](./image/throwable-1.png)
 
 ## 对比 Exception 、Error 。运行时异常 和 一般异常 的区别？
 ```text
