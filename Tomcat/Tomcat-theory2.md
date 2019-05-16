@@ -115,11 +115,6 @@ ContextConfig 解析 web.xml 顺序：
 #### Servlet 生命周期
 ![image](./image/tomcat-2-7.jpeg)
 
-
-
-https://www.jianshu.com/p/c94dc6c64ec5
-
-
 Servlet 是用 Java 编写的服务器端程序。其主要功能在于交互式地浏览和修改数据，生成动态 Web 内容。
 
 1. 请求到达 server 端，server 根据 url 映射到相应的 Servlet
@@ -139,6 +134,7 @@ single thread model
 最佳实践：不要使用该模型，servlet 中不要有全局变量
 
 #### 请求处理过程
+![image](./image/tomcat-2-8.jpeg)
 
 1. 根据 server.xml 配置的指定的 connector 以及端口监听 http、或者 ajp 请求
 2. 请求到来时建立连接,解析请求参数,创建 Request 和 Response 对象,调用顶层容器 pipeline 的 invoke 方法
@@ -146,6 +142,7 @@ single thread model
 4. Connector 将 response 流中的数据写到 socket 中
 
 #### Pipeline 与 Valve
+![image](./image/tomcat-2-9.jpeg)
 
 Pipeline 可以理解为现实中的管道,Valve 为管道中的阀门,Request 和 Response 对象在管道中 经过各个阀门的处理和控制。
 
@@ -156,6 +153,7 @@ Valve 中主要的三个方法:setNext、getNext、invoke;valve 之间的关系�
 各层容器对应的 basic valve 分别是 StandardEngineValve、StandardHostValve、 StandardContextValve、StandardWrapperValve。
 
 ## JSP引擎
+![image](./image/tomcat-2-10.jpeg)
 
 #### JSP 生命周期
      
@@ -175,7 +173,7 @@ Valve 中主要的三个方法:setNext、getNext、invoke;valve 之间的关系�
  - JSP隐式对象：request、response、out、session、application、config、
  - pageContext、page、Exception</jsp:action_name>
  
- #### JSP 元素说明
+#### JSP 元素说明
  - 代码片段:包含任意量的 Java 语句、变量、方法或表达式;
  - JSP 声明:一个声明语句可以声明一个或多个变量、方法,供后面的 Java 代码使用;
  - JSP 表达式:输出 Java 表达式的值,String 形式;
@@ -186,7 +184,8 @@ Valve 中主要的三个方法:setNext、getNext、invoke;valve 之间的关系�
  - <%@ taglib ... %>引入标签库的定义,可以是自定义标签
  - JSP 行为:jsp:include、jsp:useBean、jsp:setProperty、jsp:getProperty、jsp:forward
  
- #### Jsp 解析过程
+#### Jsp 解析过程
+ ![image](./image/tomcat-2-11.jpeg)
  
  - 代码片段:在_jspService()方法内直接输出
  - JSP 声明: 在 servlet 类中进行输出
@@ -197,22 +196,27 @@ Valve 中主要的三个方法:setNext、getNext、invoke;valve 之间的关系�
  - HTML:在_jspService()方法内直接输出
  - JSP 隐式对象:在_jspService()方法会进行声明,只能在方法中使用;
  
- ## Connector
+## Connector
+ ![image](./image/tomcat-2-12.jpeg)
  
  - Http:HTTP 是超文本传输协议,是客户端浏览器或其他程序与 Web 服务器之间的应用层通信协 议
  - AJP:Apache JServ 协议(AJP)是一种二进制协议,专门代理从 Web 服务器到位于后端的应用 程序服务器的入站请求
  
- #### 阻塞 IO
+#### 阻塞 IO
+ ![image](./image/tomcat-2-13.jpeg)
  
- #### 非阻塞 IO
+#### 非阻塞 IO
+ ![image](./image/tomcat-2-14.jpeg)
  
- #### IO多路复用
+#### IO多路复用
+ ![image](./image/tomcat-2-15.jpeg)
  
  阻塞与非阻塞的区别在于进行读操作和写操作的系统调用时，如果此时内核态没有数据可读或者没有缓冲空间可写时，是否阻塞。
  
  IO多路复用的好处在于可同时监听多个socket的可读和可写事件，这样就能使得应用可以同时监听多个socket，释放了应用线程资源。
  
- #### Tomcat各类Connector对比
+#### Tomcat各类Connector对比
+ ![image](./image/tomcat-2-16.jpeg)
  
  Connector的实现模式有三种，分别是BIO、NIO、APR，可以在server.xml中指定。
  
@@ -230,15 +234,16 @@ Valve 中主要的三个方法:setNext、getNext、invoke;valve 之间的关系�
  - Read Request Body：读取request body的数据是应用业务逻辑的事情，同时Servlet的限制，是需要阻塞读取的
  - Write Response：跟读取request body的逻辑类似，同样需要阻塞写
  
- #### NIO处理相关类
+#### NIO处理相关类
+ ![image](./image/tomcat-2-17.jpeg)
  
  - Acceptor线程负责接收连接，调用accept方法阻塞接收建立的连接，并对socket进行封装成PollerEvent，指定注册的事件为op_read，并放入到EventQueue队列中，PollerEvent的run方法逻辑的是将Selector注册到socket的指定事件；
  - Poller线程从EventQueue获取PollerEvent，并执行PollerEvent的run方法，调用Selector的select方法，如果有可读的Socket则创建Http11NioProcessor，放入到线程池中执行；
  - CoyoteAdapter是Connector到Container的适配器，Http11NioProcessor调用其提供的service方法，内部创建Request和Response对象，并调用最顶层容器的Pipeline中的第一个Valve的invoke方法
  - Mapper主要处理http url 到servlet的映射规则的解析，对外提供map方法
  
- #### NIO Connector主要参数
-      
+#### NIO Connector主要参数
+ ![image](./image/tomcat-2-18.jpeg)     
 
 ## Comet
 
@@ -247,6 +252,7 @@ Comet是一种用于web的推送技术，能使服务器实时地将更新的信
 在WebSocket出来之前，如果不适用comet，只能通过浏览器端轮询Server来模拟实现服务器端推送。
 
 Comet支持servlet异步处理IO，当连接上数据可读时触发事件，并异步写数据(阻塞)
+![image](./image/tomcat-2-19.jpeg)
 
 Tomcat要实现Comet，只需继承HttpServlet同时，实现CometProcessor接口
 
@@ -263,12 +269,14 @@ Note：
 - Note：在事件触发时要做好线程安全的操作
 
 ## 异步Servlet
+![image](./image/tomcat-2-20.jpeg)
 
 传统流程：
 - 首先，Servlet 接收到请求之后，request数据解析；
 - 接着，调用业务接口的某些方法，以完成业务处理；
 - 最后，根据处理的结果提交响应，Servlet 线程结束。
 
+![image](./image/tomcat-2-21.jpeg)
 异步处理流程：
 - 客户端发送一个请求
 - Servlet容器分配一个线程来处理容器中的一个servlet
