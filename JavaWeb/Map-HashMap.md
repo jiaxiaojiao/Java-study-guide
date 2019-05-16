@@ -5,9 +5,11 @@
 - 不能保证放入元素的顺序，无序。
 - 非线程安全。
 
+## 底层实现和原理
+
+
 ## 其他
 ```text
-HashMap底层实现和原理
 https://www.jianshu.com/p/3bf097f4cf0a
 https://blog.csdn.net/P_Doraemon/article/details/80353579
 https://blog.csdn.net/yinbingqiu/article/details/60965080
