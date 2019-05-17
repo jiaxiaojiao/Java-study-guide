@@ -1,22 +1,102 @@
 # Dubbo 分布式服务
 
+## Dubbo架构
+
+![image](./image/dubbo-2-1.png)
+
+
+节点角色说明：
+- Provider: 暴露服务的服务提供方。
+- Consumer: 调用远程服务的服务消费方。
+- Registry: 服务注册与发现的注册中心。
+- Monitor: 统计服务的调用次调和调用时间的监控中心。
+- Container: 服务运行容器。
+
+调用关系说明：
+- 0：服务容器负责启动，加载，运行服务提供者。
+- 1：服务提供者在启动时，向注册中心注册自己提供的服务。
+- 2：服务消费者在启动时，向注册中心订阅自己所需的服务。
+- 3：注册中心返回服务提供者地址列表给消费者，如果有变更，注册中心将基于长连接推送变更数据给消费者。
+- 4：服务消费者，从提供者地址列表中，基于软负载均衡算法，选一台提供者进行调用，如果调用失败，再选另一台调用。
+- 5：服务消费者和提供者，在内存中累计调用次数和调用时间，定时每分钟发送一次统计数据到监控中心。
+
+## Dubbo的超时机制：
+
+#### 超时机制
+
+Dubbo是阿里开源的分布式远程调用方案(RPC)，由于网络或服务端不可靠，会导致调用出现一种不确定的中间状态（超时）。为了避免超时导致客户端资源（线程）挂起耗尽，必须设置超时时间。
+
+Provider可以配置的Consumer端主要属性有timeout、retries、loadbalance、actives和cluster。
+
+Provider上应尽量多配置些Consumer端的属性，让Provider实现者一开始就思考Provider的服务特点与服务质量。配置之间存在着覆盖，具体规则如下： 
+1. 方法级配置优于接口级别，即小Scope优先 
+2. Consumer消费者端配置优于Provider服务提供方配置，优于全局配置 
+3. Dubbo Hard Code的配置值（默认）
+
+服务提供方配置，通过URL经由注册中心传递给消费方。
+
+建议由服务提供方设置超时，因为一个方法需要执行多长时间，服务提供方更清楚。如果一个消费方同时引用多个服务，不需要关心每个服务的超时时间。
+
+根据规则2，纵使消费端配置优于服务端配置，但消费端配置超时时间不能随心所欲，需要根据业务实际情况来设定。如果超时时间设置得太短，复杂业务本来就需要很长时间完成，服务端无法在设定的超时时间内完成业务处理；如果超时时间设置太长，会由于服务端或者网络问题导致客户端资源大量线程挂起。
+
+#### 超时配置
+
+##### Dubbo消费端 
+``` text 
+全局超时配置
+<dubbo:consumer timeout="5000" />
+指定接口以及特定方法超时配置
+<dubbo:reference interface="com.foo.BarService" timeout="2000">
+<dubbo:method name="sayHello" timeout="3000" />
+</dubbo:reference>
+```
+
+##### Dubbo服务端
+``` text 
+全局超时配置
+<dubbo:provider timeout="5000" />
+指定接口以及特定方法超时配置
+<dubbo:provider interface="com.foo.BarService" timeout="2000">
+<dubbo:method name="sayHello" timeout="3000" />
+</dubbo:provider>
+```
+
+dubbo 重试机制 retires 默认2次
+
+假设服务端设置为 <dubbo:provider delay="-1"  timeout="9000" retries="2"></dubbo:provider>，客户端不进行设置。
+
+consumer调用 provider的 insert 服务时，本次调用由于某种原因 provider没能在50秒内完成（假设provider的 insert 需要60 秒完成），consumer 会发起第一个重复请求，此次请求还是没有结果（因为 provider 60秒才能完成），第二次重复发起请求，依然没有结果。此时会返回一个com.alibaba.dubbo.remoting.TimeoutException ，但 provider 却执行了总共三次的操作（其中retire 2次），此时可以设置 客户端  设置该insert方法 的 retire 为 0：
+``` text 
+<dubbo:reference interface="com.xxx.content.service.ContentService" id="contentService" >
+    <dubbo:method name="insert" retries="0"></dubbo:method>
+</dubbo:reference>
+```
+
+
+## 关于Dubbo的几个问题
+
 #### 1、Dubbo是什么？
+
 Dubbo是阿里巴巴开源的基于 Java 的高性能 RPC 分布式服务框架，现已成为 Apache 基金会孵化项目。
 
 官网：http://dubbo.apache.org
 
 #### 2、为什么要用Dubbo？
+
 因为是阿里开源项目，国内很多互联网公司都在用，已经经过很多线上考验。内部使用了 Netty、Zookeeper，保证了高性能高可用性。
 
 使用 Dubbo 可以将核心业务抽取出来，作为独立的服务，逐渐形成稳定的服务中心，可用于提高业务复用灵活扩展，使前端应用能更快速的响应多变的市场需求。
 
 下面这张图可以很清楚的诠释，最重要的一点是，分布式架构可以承受更大规模的并发流量。
+
 ![image](./image/dubbo-1.png)
 
 下面是 Dubbo 的服务治理图。
+
 ![image](./image/dubbo-2.png)
 
 #### 3、Dubbo 和 Spring Cloud 有什么区别？
+
 两个没关联，如果硬要说区别，有以下几点。
 
 1）通信方式不同
@@ -24,9 +104,11 @@ Dubbo是阿里巴巴开源的基于 Java 的高性能 RPC 分布式服务框架�
 Dubbo 使用的是 RPC 通信，而 Spring Cloud 使用的是 HTTP RESTFul 方式。
 
 2）组成部分不同
+
 ![image](./image/dubbo-3.png)
 
 #### 4、dubbo都支持什么协议，推荐用哪种？
+
 ```text
 dubbo://（推荐）
 rmi://
@@ -53,9 +135,11 @@ Dubbo 的服务容器只是一个简单的 Main 方法，并加载一个简单�
 
 
 #### 7、Dubbo里面有哪几种节点角色？
+
 ![image](./image/dubbo-4.png)
 
 #### 8、画一画服务注册与发现的流程图
+
 ![image](./image/dubbo-5.png)
 
 该图来自 Dubbo 官网，供你参考，如果你说你熟悉 Dubbo, 面试官经常会让你画这个图，记好了。
@@ -73,9 +157,11 @@ Dubbo 的服务容器只是一个简单的 Main 方法，并加载一个简单�
 #### 11、Dubbo 核心的配置有哪些？
 
 我曾经面试就遇到过面试官让你写这些配置，我也是蒙逼。。
+
 ![image](./image/dubbo-6.png)
 
 配置之间的关系见下图。
+
 ![image](./image/dubbo-7.png)
 
 #### 12、在 Provider 上可以配置的 Consumer 端的属性有哪些？
@@ -101,9 +187,11 @@ Dubbo 缺省会在启动时检查依赖的服务是否可用，不可用时会�
 Dubbo 默认使用 Netty 框架，也是推荐的选择，另外内容还集成有Mina、Grizzly。
 
 #### 16、Dubbo有哪几种集群容错方案，默认是哪种？
+
 ![image](./image/dubbo-8.png)
 
 #### 17、Dubbo有哪几种负载均衡策略，默认是哪种？
+
 ![image](./image/dubbo-9.png)
 
 #### 18、注册了多个同一样的服务，如果测试指定的某一个服务呢？
@@ -133,6 +221,7 @@ Dubbo 允许配置多协议，在不同服务上支持不同协议或者同一�
 Dubbo 是基于 NIO 的非阻塞实现并行调用，客户端不需要启动多线程即可完成并行调用多个远程服务，相对多线程开销较小，异步调用会返回一个 Future 对象。
 
 异步调用流程图如下。
+
 ![image](./image/dubbo-10.png)
 
 #### 24、Dubbo支持分布式事务吗？
