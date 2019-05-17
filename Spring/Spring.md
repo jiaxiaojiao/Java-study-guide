@@ -10,6 +10,8 @@
 - **面向切面**， Spring提供了面向切面编程的丰富支持，允许通过分离应用的业务逻辑与系统级服务进行内聚性的开发。
 - **容器**，Spring 包含并管理应用对象的配置和生命周期。
 
+[关于Spring的几个问题](Spring-spring.md)
+
 ### SpringMVC 
 分离了控制器，模型对象，分派器以及处理程序对象的角色。
 
@@ -34,3 +36,35 @@ Spring最初利用“工厂模式” 和代理模式解耦应用组件。大家�
 云端分布式架构解决方案，基于Spring Boot。
 
 Spring MVC => Spring => Spring Boot  => Spring Cloud
+
+
+## 其他
+```text
+
+事务管理。
+
+执行某操作，前50次成功，第51次失败。
+a: 全部回滚
+b: 前50次提交，第51次抛出异常。
+ab场景分别如何设置Spring。（传播性）
+
+spring的两大核心
+aop 跟 控制反转 ioc/依赖注入DI需要仔细琢磨透
+
+spring MVC和Struts2的区别
+
+spring是单例，如果实现多例，怎么实现。
+
+Spring MVC的流程。一个request请求历经了哪些。
+最好能画出 springmvc的流程图
+
+Spring注解
+
+spring事务管理机制
+
+spring底层原理
+
+Spring Boot
+
+spring
+```
