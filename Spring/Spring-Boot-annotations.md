@@ -5,6 +5,11 @@
     控制器（注入服务）。
     
     用于标注控制层，相当于struts中的action层。
+
+- @RestController
+
+    是@Controller和@ResponseBody的合集,表示这是个控制器bean,并且是将函数的返回值直接填入HTTP响应体中,是REST风格的控制器。
+
     
 - @service 
 
@@ -43,10 +48,6 @@
 - @EnableAutoConfiguration
     
     自动配置。
-
-- @RestController
-
-    是@Controller和@ResponseBody的合集,表示这是个控制器bean,并且是将函数的返回值直接填入HTTP响应体中,是REST风格的控制器。
 
 - @Autowired
 
