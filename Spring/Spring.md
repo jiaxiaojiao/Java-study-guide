@@ -33,6 +33,10 @@
 Spring最初利用“工厂模式” 和代理模式解耦应用组件。大家觉得挺好用，于是按照这种模式搞了一个MVC框架，用来开发web应用（SpringMVC）。然后发现每次开发都要搞很多依赖，写很多样板代码很麻烦，于是搞了一些懒人整合包starter，这就是Spring Boot。
 
 ### Spring Cloud
+> Spring Cloud是一系列框架的有序集合。
+
+> Spring Cloud并没有重复制造轮子，它只是将目前各家公司开发的比较成熟、经得起实际考验的服务框架组合起来，通过Spring Boot风格进行再封装屏蔽掉了复杂的配置和实现原理，最终给开发者留出了一套简单易懂、易部署和易维护的分布式系统开发工具包。
+
 云端分布式架构解决方案，基于Spring Boot。
 
 Spring MVC => Spring => Spring Boot  => Spring Cloud
