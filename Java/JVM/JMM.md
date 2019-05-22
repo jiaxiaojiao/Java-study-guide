@@ -1,24 +1,24 @@
 # JVM内存模型
 > 我们知道，计算机CPU和内存的交互是最频繁的，内存是我们的高速缓存区，用户磁盘和CPU的交互，而CPU运转速度越来越快，磁盘远远跟不上CPU的读写速度，才设计了内存，用户缓冲用户IO等待导致CPU的等待成本，但是随着CPU的发展，内存的读写速度也远远跟不上CPU的读写速度，因此，为了解决这一纠纷，CPU厂商在每颗CPU上加入了高速缓存，用来缓解这种症状，因此，现在CPU同内存交互就变成了下面的样子。
 
-![image](./image/JMM-1.jpg)
+![image](image/JMM-1.jpg)
 
 同样，根据摩尔定律，我们知道单核CPU的主频不可能无限制的增长，要想很多的提升新能，需要多个处理器协同工作， Intel总裁的贝瑞特单膝下跪事件标志着多核时代的到来。
 
-![image](./image/JMM-2.jpg)
+![image](image/JMM-2.jpg)
 
 基于高速缓存的存储交互很好的解决了处理器与内存之间的矛盾，也引入了新的问题：缓存一致性问题。在多处理器系统中，每个处理器有自己的高速缓存，而他们又共享同一块内存（下文成主存，main memory 主要内存），当多个处理器运算都涉及到同一块内存区域的时候，就有可能发生缓存不一致的现象。为了解决这一问题，需要各个处理器运行时都遵循一些协议，在运行时需要将这些协议保证数据的一致性。这类协议包括MSI、MESI、MOSI、Synapse、Firely、DragonProtocol等。如下图所示
 
-![image](./image/JMM-3.jpg)
+![image](image/JMM-3.jpg)
 
 #### Java虚拟机内存模型中定义的访问操作与物理计算机处理的基本一致！
 
-![image](./image/JMM-4.jpg)
+![image](image/JMM-4.jpg)
 
 Java中通过多线程机制使得多个任务同时执行处理，所有的线程共享JVM内存区域main memory，而每个线程又单独的有自己的工作内存，当线程与内存区域进行交互时，数据从主存拷贝到工作内存，进而交由线程处理（操作码+操作数）。
 
 ## JVM的逻辑内存模型
-![image](./image/JMM-5.jpg)
+![image](image/JMM-5.jpg)
 
 我们现在来逐个的看下每个到底是做什么的！
 
@@ -100,11 +100,11 @@ Object obj = new Object();
 
 如果使用句柄访问方式，Java 堆中将会划分出一块内存来作为句柄池，reference中存储的就是对象的句柄地址，而句柄中包含了对象实例数据和类型数据各自的具体地址信息，如下图所示。
 
-![image](./image/JMM-6.jpg)
+![image](image/JMM-6.jpg)
 
 如果使用直接指针访问方式，Java 堆对象的布局中就必须考虑如何放置访问类型数据的相关信息，reference 中直接存储的就是对象地址，如下图所示： 
 
-![image](./image/JMM-7.jpg)
+![image](image/JMM-7.jpg)
 
 这两种对象的访问方式各有优势，使用句柄访问方式的最大好处就是reference 中存储的是稳定的句柄地址，在对象被移动（垃圾收集时移动对象是非常普遍的行为）时只会改变句柄中的实例数据指针，而reference 本身不需要被修改。
 
@@ -118,11 +118,11 @@ Object obj = new Object();
 
 参数设置如下：
 
-![image](./image/JMM-8.jpg)
+![image](image/JMM-8.jpg)
 
-![image](./image/JMM-9.jpg)
+![image](image/JMM-9.jpg)
 
-![image](./image/JMM-10.jpg)
+![image](image/JMM-10.jpg)
 
 ```text
 package com.yhj.jvm.memory.heap;
@@ -161,7 +161,7 @@ class TestCase{
 }
 ```
 
-![image](./image/JMM-11.jpg)
+![image](image/JMM-11.jpg)
 
 Java 堆内存的OutOfMemoryError异常是实际应用中最常见的内存溢出异常情况。出现Java 堆内存溢出时，异常堆栈信息“java.lang.OutOfMemoryError”会跟着进一步提示“Java heap space”。
 

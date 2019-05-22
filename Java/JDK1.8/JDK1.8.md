@@ -1,5 +1,5 @@
 # JDK 1.8的新特性
-1. 红黑树。[对HashMap等Map集合的数据结构优化](./JDK1.8-Map.md)。更快捷。
+1. 红黑树。[对HashMap等Map集合的数据结构优化](JDK1.8-Map.md)。更快捷。
 2. [Lambda 表达式](JDK1.8-Lambda.md)。
 3. [接口的默认方法与静态方法](JDK1.8-Interface.md)。
 4. [Stream 流](JDK1.8-Stream.md)

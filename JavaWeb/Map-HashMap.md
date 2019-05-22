@@ -20,7 +20,7 @@
 3. 末尾插入。
 4. 效率高。
 
-![image](./image/map-hashmap-1.md)
+![image](image/map-hashmap-1.md)
 
 
 ## 常用方法

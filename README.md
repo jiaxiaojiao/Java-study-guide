@@ -1,12 +1,12 @@
 ## 面试准备，知识点复习。
 
 ## Java 
-1. [JVM Java虚拟机](./JavaWeb/JVM.md)
+1. [JVM Java虚拟机](Java/JVM/JVM.md)
 2. [Java 集合](./JavaWeb/Collection.md)
 3. [Java 关键字](./JavaWeb/keyword.md)
 4. [线程/多线程](./JavaWeb/Thread.md)
 5. [异常](./JavaWeb/Throwable.md)
-6. [JDK 1.8的新特性](./JavaWeb/JDK1.8.md)
+6. [JDK 1.8的新特性](Java/JDK1.8/JDK1.8.md)
 7. [设计模式](./Design-Pattern/Design-Pattern.md)
 
 ## 开发框架

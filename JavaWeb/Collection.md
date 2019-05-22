@@ -1,6 +1,6 @@
 # 集合
 
-![image](./image/collection.png)
+![image](image/collection.png)
 
 ## Collection
 存储Value
