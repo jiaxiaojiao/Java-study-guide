@@ -29,7 +29,7 @@ REST一组架构约束条件和原则。满足的就是RESTful
 
 - [Lombok 底层实现原理](./Project/Lombok.md) 
 
-## [Hibernate](./Hibernate/Hibernate.md) 
+## [Hibernate](Java/Hibernate/Hibernate.md) 
 > 开放源代码的对象关系映射框架
 
 > Hibernate是一个开放源代码的对象关系映射框架，它对JDBC进行了非常轻量级的对象封装，它将POJO与数据库表建立映射关系，是一个全自动的orm框架，hibernate可以自动生成SQL语句，自动执行，使得Java程序员可以随心所欲的使用对象编程思维来操纵数据库。 Hibernate可以应用在任何使用JDBC的场合，既可以在Java的客户端程序使用，也可以在Servlet/JSP的Web应用中使用，最具革命意义的是，Hibernate可以在应用EJB的JaveEE架构中取代CMP，完成数据持久化的重任。
