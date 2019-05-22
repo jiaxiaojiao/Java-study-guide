@@ -22,14 +22,6 @@
     （实现dao访问）。
     
     用于标注数据访问层，也可以说用于标注数据访问组件，即DAO组件.
-    
-- @component 
-    
-    （把普通pojo实例化到spring容器中，相当于配置文件中的<bean id="" class=""/>）
-    
-    泛指各种组件，就是说当我们的类不属于各种归类的时候（不属于@Controller、@Services等的时候），我们就可以使用@Component来标注这个类。
-
-    @Component可配合CommandLineRunner使用，在程序启动后执行一些基础任务。
 
 - @SpringBootApplication
     
@@ -44,6 +36,54 @@
 - @Configuration
     
     等同于spring的XML配置文件；使用Java代码可以检查类型安全。
+    
+    底层是含有@Component ，所以@Configuration 具有和 @Component 的作用。
+    
+    可理解为用spring的时候xml里面的<beans>标签。
+
+```text
+@Configuration标注在类上，相当于把该类作为spring的xml配置文件中的<beans>，作用为：配置spring容器(应用上下文)
+
+package com.dsx.demo;
+
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class TestConfiguration {
+    public TestConfiguration() {
+        System.out.println("TestConfiguration容器启动初始化。。。");
+    }
+}
+```    
+    
+相当于：
+
+```text
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+    xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util" xmlns:task="http://www.springframework.org/schema/task" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+        http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd" default-lazy-init="false">
+
+
+</beans>
+```    
+    
+- @component 
+    
+    （把普通pojo实例化到spring容器中，相当于配置文件中的<bean id="" class=""/>）
+    
+    泛指各种组件，就是说当我们的类不属于各种归类的时候（不属于@Controller、@Services等的时候），我们就可以使用@Component来标注这个类。
+
+    @Component可配合CommandLineRunner使用，在程序启动后执行一些基础任务。
+    
 
 - @EnableAutoConfiguration
     
