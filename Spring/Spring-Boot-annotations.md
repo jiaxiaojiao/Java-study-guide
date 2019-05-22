@@ -73,7 +73,8 @@ public class TestConfiguration {
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd" default-lazy-init="false">
 
 
-</beans>
+</beans>https://www.cnblogs.com/wenq001/p/9261496.html
+
 ```    
     
 - @component 
