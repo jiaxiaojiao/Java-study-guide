@@ -10,11 +10,28 @@
 - **面向切面**： Spring提供了面向切面编程的丰富支持，允许通过分离应用的业务逻辑与系统级服务进行内聚性的开发。
 - **容器**： Spring 包含并管理应用对象的配置和生命周期。
 
+#### Spring 配置方式
+- 基于XML的配置
+- 基于注解的配置
+- 基于Java的配置
+
+#### Spring 配置
+Spring对Java配置的支持是由@Configuration注解和@Bean注解来实现的。由@Bean注解的方法将会实例化、配置和初始化一个新对象，这个对象将由Spring的IoC容器来管理。@Bean声明所起到的作用与<bean/> 元素类似。被@Configuration所注解的类则表示这个类的主要目的是作为bean定义的资源。被@Configuration声明的类可以通过在同一个类的内部调用@bean方法来设置嵌入bean的依赖关系。
+
+#### Spring 事务
+- @Transcational
+
+
 #### [Spring 详细介绍](Spring-Spring.md)
+
 
 
 ## SpringMVC 
 分离了控制器，模型对象，分派器以及处理程序对象的角色。
+
+#### Spring MVC原理
+
+![image](./image/springmvc-1.png)
 
 ## [Spring Boot](./Spring-Boot.md)
 简单易用，轻松上手，其中注解会给使用者提供方便。
