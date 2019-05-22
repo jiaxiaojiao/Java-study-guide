@@ -110,4 +110,4 @@ Hibernate在管理数据的时候，由于并发，可能会存在很多问题�
 1. version 版本号来验证
 2. timestamp 时间戳来验证
 
-
+## [to...JDBC](../JDBC/JDBC.md) 

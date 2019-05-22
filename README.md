@@ -21,7 +21,7 @@
 
 ## [分布式系统](./Distributed-System/distributed-system.md)
 ####  [RESTful](/RESTful/RESTful.md)
-#### [Dubbo](./Dubbo/Dubbo.md)
+#### [Dubbo](Java/Dubbo/Dubbo.md)
 
 REST一组架构约束条件和原则。满足的就是RESTful
 
@@ -34,7 +34,7 @@ REST一组架构约束条件和原则。满足的就是RESTful
 
 > Hibernate是一个开放源代码的对象关系映射框架，它对JDBC进行了非常轻量级的对象封装，它将POJO与数据库表建立映射关系，是一个全自动的orm框架，hibernate可以自动生成SQL语句，自动执行，使得Java程序员可以随心所欲的使用对象编程思维来操纵数据库。 Hibernate可以应用在任何使用JDBC的场合，既可以在Java的客户端程序使用，也可以在Servlet/JSP的Web应用中使用，最具革命意义的是，Hibernate可以在应用EJB的JaveEE架构中取代CMP，完成数据持久化的重任。
 
-## [Mybatis](./Mybatis/Mybatis.md) 
+## [Mybatis](Java/Mybatis/Mybatis.md) 
 > 持久层框架。
 
 > MyBatis 是支持定制化 SQL、存储过程以及高级映射的优秀的持久层框架。MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。MyBatis 可以对配置和原生Map使用简单的 XML 或注解，将接口和 Java 的 POJOs(Plain Old Java Objects,普通的 Java对象)映射成数据库中的记录。
@@ -78,7 +78,7 @@ web容器有几种作用域。如何防止SQL注入。
 > 操作系统
 - [Linux 常用命令](./Linux/Linux.md)
 
-##  [软件开发流程](./process/Software-Development-Process.md)
+##  [软件开发流程](Process/Software-Development-Process.md)
 
 ## 其他
 ```text
@@ -87,7 +87,7 @@ web容器有几种作用域。如何防止SQL注入。
 - 怎么实现全局唯一ID
 - 如何保障请求执行顺序
 
-## 数据结构
+## [数据结构](./Data-Structure/Data-Structure.md)
 - 常见数据结构的区别
 - 为什么创建这种数据结构
 - 哈希表
