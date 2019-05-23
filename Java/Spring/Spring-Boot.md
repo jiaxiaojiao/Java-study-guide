@@ -63,9 +63,9 @@ spring.datasource.initial-size=5
 
 ## Spring Boot常用注解
 
-- [自定义配置文件](./Spring-Boot-properties.md) 
+- [自定义配置文件](Spring-Boot-properties.md) 
 
-- [常用注解](./Spring-Boot-annotations.md)
+- [常用注解](Spring-Boot-annotations.md)
 
 ## 开启Spring Boot特性的方式、Spring Boot依赖。
 #### 1.  继承 spring-boot-starter-parent 项目
@@ -96,4 +96,4 @@ spring.datasource.initial-size=5
 2. 资源文件过滤问题。
 
 
-## [关于Spring Boot的几个问题](./Spring-Boot-2.md)
+## [关于Spring Boot的几个问题](Spring-Boot-2.md)

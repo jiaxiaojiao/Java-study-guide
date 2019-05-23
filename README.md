@@ -1,11 +1,11 @@
 ## 面试准备，知识点复习。
 
-## Java 
+## [Java](Java/Java.md) 
 1. [JVM Java虚拟机](Java/JVM/JVM.md)
-2. [Java 集合](./JavaWeb/Collection.md)
-3. [Java 关键字](./JavaWeb/keyword.md)
-4. [线程/多线程](./JavaWeb/Thread.md)
-5. [异常](./JavaWeb/Throwable.md)
+2. [Java 集合](Java/Collection/Collection.md)
+3. [Java 关键字](Java/Keyword/keyword.md)
+4. [线程/多线程](Java/Thread/Thread.md)
+5. [异常](Java/Throwable/Throwable.md)
 6. [JDK 1.8的新特性](Java/JDK1.8/JDK1.8.md)
 7. [设计模式](./Design-Pattern/Design-Pattern.md)
 
@@ -20,14 +20,14 @@
 #### Spring Cloud 
 
 ## [分布式系统](./Distributed-System/distributed-system.md)
-####  [RESTful](/RESTful/RESTful.md)
+####  [RESTful](/Java/RESTful/RESTful.md)
 #### [Dubbo](Java/Dubbo/Dubbo.md)
 
 REST一组架构约束条件和原则。满足的就是RESTful
 
 ## 一些开源项目
 
-- [Lombok 底层实现原理](./Project/Lombok.md) 
+- [Lombok 底层实现原理](Java/Spring/tools/lombok.md) 
 
 ## [Hibernate](Java/Hibernate/Hibernate.md) 
 > 开放源代码的对象关系映射框架
@@ -78,19 +78,15 @@ web容器有几种作用域。如何防止SQL注入。
 > 操作系统
 - [Linux 常用命令](./Linux/Linux.md)
 
+## [缓存](Cache/cache.md)
+
+## [数据结构](./Data-Structure/Data-Structure.md)
+
 ##  [软件开发流程](Process/Software-Development-Process.md)
 
 ## 其他
 ```text
-## Java 基础
-- i++ 是不是原子操作
-- 怎么实现全局唯一ID
-- 如何保障请求执行顺序
 
-## [数据结构](./Data-Structure/Data-Structure.md)
-- 常见数据结构的区别
-- 为什么创建这种数据结构
-- 哈希表
 ```
 
 

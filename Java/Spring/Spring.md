@@ -4,7 +4,7 @@
 <br> 功能：Spring使用基本的JavaBean来完成以前只可能由EJB完成的事情。并提供更多的企业应用功能。
 
 ## Spring  
-> 轻量级的 [控制反转IoC](Spring-IoC.md) 和 [面向切面AOP](./Spring-AOP.md) 的容器框架。
+> 轻量级的 [控制反转IoC](Spring-IoC.md) 和 [面向切面AOP](Spring-AOP.md) 的容器框架。
 - **轻量**： 从大小和开销两方面而言，Spring都是轻量的。 1MB
 - **控制反转**： Spring通过一种控制反转IOC技术促进了松耦合。当应用了IOC 一个对象依赖的其他对象会通过被动的方式传递进来，而不是这个对象自己创建或者查找依赖对象。
 - **面向切面**： Spring提供了面向切面编程的丰富支持，允许通过分离应用的业务逻辑与系统级服务进行内聚性的开发。
@@ -31,9 +31,9 @@ Spring对Java配置的支持是由@Configuration注解和@Bean注解来实现的
 
 #### Spring MVC原理
 
-![image](./image/springmvc-1.png)
+![image](image/springmvc-1.png)
 
-## [Spring Boot](./Spring-Boot.md)
+## [Spring Boot](Spring-Boot.md)
 简单易用，轻松上手，其中注解会给使用者提供方便。
 
 对第三方技术进行了很好的封装和整合，提供了大量第三方接口。

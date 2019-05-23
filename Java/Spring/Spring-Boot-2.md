@@ -24,11 +24,11 @@
 
 #### 五、Spring Boot的目录结构是怎么样的？
 
-![image](./image/springboot-1-1.png)
+![image](../Java/Spring/image/springboot-1-1.png)
 
 这个目录结构是主流和推荐的做法，而在主入口类上加上 @SpringBootApplication 注解来开启 Spring Boot 的各项能力，如自动配置、组件扫描等。
 
-![image](./image/springboot-1-2.png)
+![image](../Java/Spring/image/springboot-1-2.png)
 
 #### 六、如何理解Spring Boot 中的 Starters？ 启动器
 
@@ -66,7 +66,7 @@ spring-boot-starter-logging  默认的日志启动器，默认使用Logback。
 
 使用方式：
 
-![image](./image/springboot-1-3.png)
+![image](../Java/Spring/image/springboot-1-3.png)
 
 启动顺序：
 
@@ -108,7 +108,7 @@ spring-boot-devtools
 #### 十二、Spring Boot 如何定义多套不同环境配置？
 提供多套配置文件
 
-![image](./image/springboot-1-4.png)
+![image](../Java/Spring/image/springboot-1-4.png)
 
 #### 十三、Spring Boot 如何兼容老Spring项目
 

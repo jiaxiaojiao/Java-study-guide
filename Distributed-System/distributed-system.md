@@ -8,6 +8,14 @@
 2. 基于缓存（redis，memcached，tair） 实现分布式锁。
 3.  基于Zookeeper实现分布式锁。
 
+## 如何构建全局唯一ID？
+- java.util.UUID包下jdk 1.5之后新增的类java.util.UUID#randomUUID
+- 数据库自增主键。
+- SnowFlake算法即雪花算法
+- 第三方软件生成（Redis）
+    
+    Redis实现了一个原子操作INCR和INCRBY实现递增的操作
+
 ## 其他
 ```text
 分布式Session的一致性。

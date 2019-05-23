@@ -15,7 +15,7 @@
 - **异常处理**：Spring 提供方便的API把具体技术相关的异常（比如由JDBC，Hibernate or JDO抛出的）转化为一致的unchecked 异常
 
 ## Spring 框架的基本模块
-![image](./image/spring-1.png)
+![image](image/spring-1.png)
 
 - Core module
 - Bean module

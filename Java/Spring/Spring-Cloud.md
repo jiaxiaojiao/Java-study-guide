@@ -6,7 +6,7 @@
 
 ## Spring Cloud组成
 
-![image](./image/spring-cloud-1.jpg)
+![image](../Java/Spring/image/spring-cloud-1.jpg)
 
 Spring Cloud的子项目，大致可分成两类，一类是对现有成熟框架”Spring Boot化”的封装和抽象，也是数量最多的项目；第二类是开发了一部分分布式系统的基础设施的实现，如Spring Cloud Stream扮演的就是kafka, ActiveMQ这样的角色。
 

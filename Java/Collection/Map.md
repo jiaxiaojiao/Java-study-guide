@@ -4,9 +4,9 @@
 
 通过查找Key来获取对应的Value，Key的值不允许重复。
 
-- HashMap  数组+链表/红黑树，非线程安全，无序，值不唯一， 实际开发过程中key值基本都是String类型的。
+- [HashMap](Map-HashMap.md)  数组+链表/红黑树，非线程安全，无序，值不唯一， 实际开发过程中key值基本都是String类型的。
 - HashTable  数组+链表，继承Dictionary，线程安全，无序，值不能为空
-- TreeMap 红黑树，非线程安全，有序，不唯一
+- [TreeMap](Map-TreeMap.md) 红黑树，非线程安全，有序，不唯一
 - ConcurrentHashMap， 底层数组+链表/红黑树，线程安全，无序，不唯一
 
 ## Map相关方法的底层实现原理
@@ -16,7 +16,7 @@
 - key可以是任意类型，实际开发过程中key值基本都是String类型的，基本数据类型，引用数据类型。
 
 
-##  HashMap
+##  [HashMap](Map-HashMap.md)
 - 存储<key,value>，实现Map，key/value可以为null
 - 线程不安全，效率较高。
 - 实现HashMap的同步：Map m = Collections.synchronizedMap(new HashMap())

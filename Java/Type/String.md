@@ -29,4 +29,4 @@ String内部实现了Comparable接口。
 使用toUpperCase 和 toLowerCase 方法让一个字符串变为 大写或小写。
 
 ## 字符串拆分
-- [字符串拆分](./String-split.md)
+- [字符串拆分](String-split.md)

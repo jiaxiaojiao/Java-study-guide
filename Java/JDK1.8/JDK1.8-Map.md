@@ -13,7 +13,7 @@ Map | getOrDefault() forEach() replaceAll() putIfAbsent() remove() replace() com
 ## 红黑树
 > 对HashMap等Map集合的数据结构优化。更快捷。
 
-## [HashMap](../../JavaWeb/Map-HashMap.md) 
+## [HashMap](../Collection/Map-HashMap.md) 
 
 #### 原来的HashMap
 1. 数据结构哈希表（数组+链表）
