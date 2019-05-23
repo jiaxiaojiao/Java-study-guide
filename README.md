@@ -11,9 +11,9 @@
 
 ## 开发框架
 
-#### [Spring](./Spring/Spring.md) 
+#### [Spring](Java/Spring/Spring.md) 
 
-> Spring是轻量级的 [控制反转IoC](Spring/Spring-IoC.md) 和 [面向切面AOP](./Spring/Spring-AOP.md) 的容器框架。
+> Spring是轻量级的 [控制反转IoC](Java/Spring/Spring-IoC.md) 和 [面向切面AOP](./Spring/Spring-AOP.md) 的容器框架。
 
 #### Spring Boot
 
