@@ -19,7 +19,7 @@
 > Java 企业应用的Web应用
 
 - 框架
-- 基本MVC
+- 基本[MVC](MVC/MVC.md)
     - [Spring](Java/Spring/Spring.md)
     > Spring是轻量级的 [控制反转IoC](Java/Spring/Spring-IoC.md) 和 [面向切面AOP](./Spring/Spring-AOP.md) 的容器框架。
     - Spring MVC
@@ -60,11 +60,11 @@
         - 并发
         - IO设计模式
 - 网络开发
-    - [数据结构](Data-Structure/Data-Structure.md)
+    - 数据结构
         - XML
         - JSON
     - 通信协议
-        - HTTP/HTTPS
+        - [HTTP](HTTP/HTTP.md)/HTTPS
         - XMPP
         - Socket
     - 通信框架
@@ -111,13 +111,14 @@
     - 内存泄漏与监控
 
 ## 数据结构与算法
-- 数据结构
-    - 线性结构： 链表 hash
+- [数据结构](Data-Structure/Data-Structure.md)
+    - 线性结构： [链表](Data-Structure/linked-list.md) hash
     - 树形结构： 树 二叉树
     - 图
 - 算法
     - 搜索算法
     - 排序算法
+        - [冒泡排序](/Algorithm/Sorting-Algorithm/Bubble-Sort.md)
 
 ## 数据库 DB
 - 关系型数据库
@@ -134,6 +135,7 @@
     - [MySQL](/DB/MySQL.md)
 - 非关系型数据库
     - [Redis](/DB/Redis.md)
+    - [MongoDB](/DB/MongoDB.md)
 
 ## [设计模式](Design-Pattern/Design-Pattern.md)
 - 原则
@@ -141,16 +143,17 @@
 - 结构模式
 - 行为模式
 
-## [分布式系统](./Distributed-System/distributed-system.md)
-- [RESTful](/Java/RESTful/RESTful.md)
+## [分布式系统](Distributed-System/distributed-system.md)
+- [RESTful](Java/RESTful/RESTful.md)
 > REST一组架构约束条件和原则。满足的就是RESTful
 - [Dubbo](Java/Dubbo/Dubbo.md)
+- [Zookeeper](Distributed-System/Zookeeper/Zookeeper.md)
 
 ##  [软件开发流程](Process/Software-Development-Process.md)
 
 ## 操作系统
 - Linux
-    - [Linux 常用命令](./Linux/Linux.md)
+    - [Linux 常用命令](Linux/Linux.md)
 
 ## 程序开发语言
 - [程序开发语言综述](Language/Language.md)
