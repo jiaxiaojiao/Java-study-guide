@@ -1,25 +1,16 @@
 # Spring
-> 开源框架。
-<br> 目的：解决企业应用开发的复杂性。
-<br> 功能：Spring使用基本的JavaBean来完成以前只可能由EJB完成的事情。并提供更多的企业应用功能。
+> Spring 是一个开源框架，是为了解决企业应用程序开发复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许您选择使用哪一个组件，同时为 J2EE 应用程序开发提供集成的框架。
 
 ## Spring  
+
+## [Spring 架构底层模型](Spring-Framework.md)
+
+## Spring 架构特征
 > 轻量级的 [控制反转IoC](Spring-IoC.md) 和 [面向切面AOP](Spring-AOP.md) 的容器框架。
 - **轻量**： 从大小和开销两方面而言，Spring都是轻量的。 1MB
 - **控制反转**： Spring通过一种控制反转IOC技术促进了松耦合。当应用了IOC 一个对象依赖的其他对象会通过被动的方式传递进来，而不是这个对象自己创建或者查找依赖对象。
 - **面向切面**： Spring提供了面向切面编程的丰富支持，允许通过分离应用的业务逻辑与系统级服务进行内聚性的开发。
 - **容器**： Spring 包含并管理应用对象的配置和生命周期。
-
-#### Spring 配置方式
-- 基于XML的配置
-- 基于注解的配置
-- 基于Java的配置
-
-#### Spring 配置
-Spring对Java配置的支持是由@Configuration注解和@Bean注解来实现的。由@Bean注解的方法将会实例化、配置和初始化一个新对象，这个对象将由Spring的IoC容器来管理。@Bean声明所起到的作用与<bean/> 元素类似。被@Configuration所注解的类则表示这个类的主要目的是作为bean定义的资源。被@Configuration声明的类可以通过在同一个类的内部调用@bean方法来设置嵌入bean的依赖关系。
-
-#### Spring 事务
-- @Transcational
 
 
 #### [Spring 详细介绍](Spring-Spring.md)
