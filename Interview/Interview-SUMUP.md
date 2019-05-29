@@ -261,29 +261,64 @@ Java通过Executors提供了四个静态方法创建线程池：
 
 #### 5. Synchronized  lock reentrantLock，区别，用法，原理。
 ```text
-共同点：
-    1. 加锁方式同步，阻塞式同步。
+共同点： 加锁方式同步，阻塞式同步。
     
 区别：
-    Synchronized 
+    Synchronized 同步
         1. 是java语言的关键字，是原生语法层面的互斥，需要jvm实现。
         2. 便利性：使用比较简洁，并且由编译器去保证锁的加锁和释放。
+           在发生异常时，会自动释放线程占有的锁，因此不会导致死锁现象发生。
         3. 不如ReentrantLock灵活。
+            ①. 等待的线程会一直等待下去，不能够响应中断。
+            ②. 无法判断锁的状态。
         4. 性能：Synchronized引入了偏向锁，轻量级锁（自旋锁）后，性能与ReentrantLock差不多。
+        5. 悲观锁。
+    Lock 锁
+        1. Lock是一个类，接口，通过这个类可以实现同步访问。
+        2. 需要手动释放锁。
+        3. 乐观锁。
     ReentrantLock 可重入锁
+        1. 是唯一实现了Lock接口的类，并且ReentrantLock提供了更多的方法
         1. 是JDK 1.5之后提供的API层面的互斥锁，需要lock()和unlock()方法配合try/finally语句块来完成。
-        2. 便利性：需要手工声明来加锁和释放锁，为了避免忘记手工释放锁造成死锁，所以最好在finally中声明释放锁。
+        2. 便利性：需要手工声明来加锁和释放锁。
+           为了避免忘记手工释放锁造成死锁，所以最好在finally中声明释放锁。
         3. 更灵活。
-        4. 性能高。
-        5. ReentrantLock可以指定是公平锁还是非公平锁。而synchronized只能是非公平锁。所谓的公平锁就是先等待的线程先获得锁。
-        6. ReentrantLock提供了一个Condition（条件）类，用来实现分组唤醒需要唤醒的线程们，而不是像synchronized要么随机唤醒一个线程要么唤醒全部线程。
-        7. ReentrantLock提供了一种能够中断等待锁的线程的机制，通过lock.lockInterruptibly()来实现这个机制。
+            ①. ReentrantLock可以指定是公平锁还是非公平锁。而synchronized只能是非公平锁。所谓的公平锁就是先等待的线程先获得锁。
+            ②. ReentrantLock提供了一个Condition（条件）类，用来实现分组唤醒需要唤醒的线程们，而不是像synchronized要么随机唤醒一个线程要么唤醒全部线程。
+            ③. ReentrantLock提供了一种能够中断等待锁的线程的机制，通过lock.lockInterruptibly()来实现这个机制。
+            ④. 可以判断锁的状态，知道有没有成功获取锁。
+        4. 性能高。可以提高多个线程进行读操作的效率。
+        
+Synchronized 底层实现： 
+    synchronized映射成字节码指令就是增加来两个指令：monitorenter和monitorexit。
+    当一条线程进行执行的遇到monitorenter指令的时候，它会去尝试获得锁，如果获得锁那么锁计数+1（为什么会加一呢，因为它是一个可重入锁，所以需要用这个锁计数判断锁的情况），如果没有获得锁，那么阻塞。
+    当它遇到monitorexit的时候，锁计数器-1，当计数器为0，那么就释放锁。
+    释放锁有两种机制：一种就是执行完释放；另外一种就是发送异常，虚拟机释放。
+    
+    尽可能用Synchronized， 原因是Synchronized优化了：
+    1. 线程自旋和适应性自旋。
+    2. 锁消除。把不必要的同步在编译阶段进行移除。
+    3. 锁粗化。
+    4. 轻量级锁。
+    5. 偏向锁。
 
 ReentrantLock实现的原理：
-ReentrantLock的实现是一种自旋锁，通过循环调用CAS操作来实现加锁。它的性能比较好也是因为避免了使线程进入内核态的阻塞状态。
+    ReentrantLock的实现是一种自旋锁，通过循环调用CAS操作来实现加锁。
+    它的性能比较好也是因为避免了使线程进入内核态的阻塞状态。
 
 
 ```
+// TODO
+资料，扩展：
+https://blog.csdn.net/zxd8080666
+https://blog.csdn.net/ly199108171231/article/details/88098614
+https://www.cnblogs.com/baizhanshi/p/6419268.html
+https://www.jianshu.com/p/96c89e6e7e90
+https://annan211.iteye.com/blog/2144218
+http://www.bubuko.com/infodetail-2328760.html
+https://zhidao.baidu.com/question/204336689531418805.html
+http://blog.sina.com.cn/s/blog_73b4b91f0102y1xh.html
+
 
 ReentrantLock的用法：
 
