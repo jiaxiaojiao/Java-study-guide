@@ -261,7 +261,7 @@ Java通过Executors提供了四个静态方法创建线程池：
 
 #### 5. Synchronized  lock reentrantLock，区别，用法，原理。
 ```text
-共同点： 加锁方式同步，阻塞式同步。
+共同点： 加锁方式同步，阻塞式同步。都是可重入锁。
     
 区别：
     Synchronized 同步
@@ -287,13 +287,22 @@ Java通过Executors提供了四个静态方法创建线程池：
             ②. ReentrantLock提供了一个Condition（条件）类，用来实现分组唤醒需要唤醒的线程们，而不是像synchronized要么随机唤醒一个线程要么唤醒全部线程。
             ③. ReentrantLock提供了一种能够中断等待锁的线程的机制，通过lock.lockInterruptibly()来实现这个机制。
             ④. 可以判断锁的状态，知道有没有成功获取锁。
+            ⑤. 锁等待时间。
+            ⑥. 快速轮询。
         4. 性能高。可以提高多个线程进行读操作的效率。
-        
-Synchronized 底层实现： 
+
+```
+
+Synchronized 底层实现：
+```text
     synchronized映射成字节码指令就是增加来两个指令：monitorenter和monitorexit。
     当一条线程进行执行的遇到monitorenter指令的时候，它会去尝试获得锁，如果获得锁那么锁计数+1（为什么会加一呢，因为它是一个可重入锁，所以需要用这个锁计数判断锁的情况），如果没有获得锁，那么阻塞。
     当它遇到monitorexit的时候，锁计数器-1，当计数器为0，那么就释放锁。
     释放锁有两种机制：一种就是执行完释放；另外一种就是发送异常，虚拟机释放。
+    
+    底层实现的另一种解释：synchronized关键字需要一个引用类型的参数，这个参数也叫做监听器（monitor）；
+    JVM通过这个监听器来管理所有需要同步的线程（synchronized这个监听器的所有线程）运行状态，
+    成功占有该monitor的线程即成为该监听器的owner，其他线程则被状态切换至阻塞状态并维护在一个队列中准备下一次的竞争。
     
     尽可能用Synchronized， 原因是Synchronized优化了：
     1. 线程自旋和适应性自旋。
@@ -301,27 +310,31 @@ Synchronized 底层实现：
     3. 锁粗化。
     4. 轻量级锁。
     5. 偏向锁。
+```
+对象、监视器、同步队列和执行线程间的关系如下图：
+![image](image/synchronized-1.png)
 
-ReentrantLock实现的原理：
-    ReentrantLock的实现是一种自旋锁，通过循环调用CAS操作来实现加锁。
-    它的性能比较好也是因为避免了使线程进入内核态的阻塞状态。
+synchronized的使用场景： 
+```text
+①方法同步  public synchronized void method1
+②代码块同步 synchronized(this){ //TODO }
+③方法同步  public synchronized static void method3
+④代码块同步 synchronized(Test.class){ //TODO}
+⑤代码块同步 synchronized(o) {}
 
 
 ```
-// TODO
-资料，扩展：
-https://blog.csdn.net/zxd8080666
-https://blog.csdn.net/ly199108171231/article/details/88098614
-https://www.cnblogs.com/baizhanshi/p/6419268.html
-https://www.jianshu.com/p/96c89e6e7e90
-https://annan211.iteye.com/blog/2144218
-http://www.bubuko.com/infodetail-2328760.html
-https://zhidao.baidu.com/question/204336689531418805.html
-http://blog.sina.com.cn/s/blog_73b4b91f0102y1xh.html
+
+ReentrantLock实现的原理：
+```text
+    ReentrantLock的实现是一种自旋锁，通过循环调用CAS操作来实现加锁。
+    它的性能比较好也是因为避免了使线程进入内核态的阻塞状态。
+
+```
+
 
 
 ReentrantLock的用法：
-
 ```java
 public class SynDemo{
 	public static void main(String[] arg){
@@ -345,52 +358,271 @@ class MyThread implements Runnable {
 ```
 
 #### 6. CountDownLatch 与 CyclicBarrier 用法
-```text
+帮助Java并发编程。
 
-```
+1. CountDownLatch用法 
+    
+    CountDownLatch类位于java.util.concurrent包下，利用它可以实现类似计数器的功能。。
+    
+    构造器：
+    ```text
+       public CountDownLatch(int count) {  };  //参数count为计数值
+    ```
+    
+    重要的方法：
+    ```text
+       public void await() throws InterruptedException { };   //调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行
+       public boolean await(long timeout, TimeUnit unit) throws InterruptedException { };  //和await()类似，只不过等待一定的时间后count值还没变为0的话就会继续执行
+       public void countDown() { };  //将count值减1
+    ```
+
+2. CyclicBarrier用法
+    
+    字面意思回环栅栏，通过它可以实现让一组线程等待至某个状态之后再全部同时执行。
+    叫做回环是因为当所有等待线程都被释放以后，CyclicBarrier可以被重用。
+    我们暂且把这个状态就叫做barrier，当调用await()方法之后，线程就处于barrier了。
+    
+    CyclicBarrier类位于java.util.concurrent包下，CyclicBarrier提供2个构造器：
+    ```text
+       // 参数parties指让多少个线程或者任务等待至barrier状态；参数barrierAction为当这些线程都达到barrier状态时会执行的内容。
+       public CyclicBarrier(int parties, Runnable barrierAction) {}    
+       public CyclicBarrier(int parties) {}
+    ```
+    
+    CyclicBarrier中最重要的方法就是await方法，它有2个重载版本：
+    ```text
+       // 常用，用来挂起当前线程，直至所有线程都到达barrier状态再同时执行后续任务；
+       public int await() throws InterruptedException, BrokenBarrierException { };
+       // 让这些线程等待至一定的时间，如果还有线程没有到达barrier状态就直接让到达barrier的线程执行后续任务。
+       public int await(long timeout, TimeUnit unit)throws InterruptedException,BrokenBarrierException,TimeoutException { };
+    ```
+
+3. Semaphore用法
+    
+    Semaphore翻译成字面意思为 信号量，Semaphore可以控同时访问的线程个数，通过 acquire() 获取一个许可，如果没有就等待，而 release() 释放一个许可。
+    
+    Semaphore类位于java.util.concurrent包下，它提供了2个构造器：
+    ```text
+       public Semaphore(int permits) {          //参数permits表示许可数目，即同时可以允许多少线程进行访问
+           sync = new NonfairSync(permits);
+       }
+       public Semaphore(int permits, boolean fair) {    //这个多了一个参数fair表示是否是公平的，即等待时间越久的越先获取许可
+           sync = (fair)? new FairSync(permits) : new NonfairSync(permits);
+       }
+    ```
+    
+    Semaphore类中比较重要的几个方法，首先是acquire()、release()方法：
+    ```text
+       public void acquire() throws InterruptedException {  }     //获取一个许可，若无许可能够获得，则会一直等待，直到获得许可。
+       public void acquire(int permits) throws InterruptedException { }    //获取permits个许可
+       public void release() { }          //释放一个许可。 注意，在释放许可之前，必须先获获得许可。
+       public void release(int permits) { }    //释放permits个许可
+    ```
+    
+    这4个方法都会被阻塞，如果想立即得到执行结果，可以使用下面几个方法：
+    
+    ```text
+       public boolean tryAcquire() { };    //尝试获取一个许可，若获取成功，则立即返回true，若获取失败，则立即返回false
+       public boolean tryAcquire(long timeout, TimeUnit unit) throws InterruptedException { };  //尝试获取一个许可，若在指定的时间内获取成功，则立即返回true，否则则立即返回false
+       public boolean tryAcquire(int permits) { }; //尝试获取permits个许可，若获取成功，则立即返回true，若获取失败，则立即返回false
+       public boolean tryAcquire(int permits, long timeout, TimeUnit unit) throws InterruptedException { }; //尝试获取permits个许可，若在指定的时间内获取成功，则立即返回true，否则则立即返回false
+    ```
+    下面对上面说的三个辅助类进行一个总结：
+    
+    1）CountDownLatch和CyclicBarrier都能够实现线程之间的等待，只不过它们侧重点不同：
+    
+    CountDownLatch一般用于某个线程A等待若干个其他线程执行完任务之后，它才执行；
+    
+    而CyclicBarrier一般用于一组线程互相等待至某个状态，然后这一组线程再同时执行；
+    
+    另外，CountDownLatch是不能够重用的，而CyclicBarrier是可以重用的。
+    
+    2）Semaphore其实和锁有点类似，它一般用于控制对某组资源的访问权限。
+
 
 #### 7. volatile关键字的作用和原理
-```text
 
-```
+一旦一个共享变量（类的成员变量、类的静态成员变量）被volatile修饰以后，就具备了两次语义：
+- 保证了不同线程对这个变量进行操作时的可见性，即一个线程修改了某个变量的值，这新值对其他线程来说是立即可见的。但不能保证原子性。
+- 禁止进行指令重排序。
+
+volatile的原理和实现机制。下面这段话摘自《深入理解Java虚拟机》：“观察加入volatile关键字和没有加入volatile关键字时所生成的汇编代码发现，加入volatile关键字时，会多出一个lock前缀指令”。
+
+lock前缀指令实际上相当于一个内存屏障（也成内存栅栏），内存屏障会提供3个功能：
+- 它确保指令重排序时不会把其后面的指令排到内存屏障之前的位置，也不会把前面的指令排到内存屏障的后面；即在执行到内存屏障这句指令时，在它前面的操作已经全部完成；
+- 它会强制将对缓存的修改操作立即写入主存；
+- 如果是写操作，它会导致其他CPU中对应的缓存行无效。
+
 
 #### 8. 乐观锁和悲观锁
-```text
 
-```
+悲观锁：假设一定会发生并发冲突，通过阻塞其他所有线程来保证数据的完整性。
 
-#### 9. 对公平锁，非公平锁，可冲入锁，自旋锁，读写锁的理解。
-```text
+乐观锁：假设不会发生并发冲突，直接不加锁去完成某项更新，如果冲突就返回失败。
 
-```
+乐观锁的一种实现方式-CAS(Compare and Swap 比较并交换)
+
+#### 9. 对公平锁，非公平锁，可重入锁，自旋锁，读写锁的理解。
+公平锁：加锁前先查看是否有排队等待的线程，有的话优先处理排在前面的线程，先来先得。
+
+非公平所：线程加锁时直接尝试获取锁，获取不到就自动到队尾等待。
+
+可重入锁： 当一个线程得到一个对象后，再次请求该对象锁时是可以再次得到该对象的锁的。
+           具体概念就是：自己可以再次获取自己的内部锁。
+           Java里面内置锁(synchronized)和Lock(ReentrantLock)都是可重入的。
+
+自旋锁（spinlock）：是指当一个线程在获取锁的时候，如果锁已经被其它线程获取，那么该线程将循环等待，然后不断的判断锁是否能够被成功获取，直到获取到锁才会退出循环。
+
+读写锁： 实际是一种特殊的自旋锁，它把对共享资源的访问者划分成读者和写者，读者只对共享资源进行读访问，写者则需要对共享资源进行写操作。这种锁相对于自旋锁而言，能提高并发性，因为在多处理器系统中，它允许同时有多个读者来访问共享资源，最大可能的读者数为实际的逻辑CPU数。写者是排他性的，一个读写锁同时只能有一个写者或多个读者（与CPU数相关），但不能同时既有读者又有写者。
 
 #### 10. CAS是什么，底层原理
-```text
+乐观锁的一种实现方式-CAS(Compare and Swap 比较并交换)
 
-```
+在计算机科学中，比较和交换（Conmpare And Swap）是用于实现多线程同步的原子指令。 它将内存位置的内容与给定值进行比较，只有在相同的情况下，将该内存位置的内容修改为新的给定值。 这是作为单个原子操作完成的。 原子性保证新值基于最新信息计算; 如果该值在同一时间被另一个线程更新，则写入将失败。 操作结果必须说明是否进行替换; 这可以通过一个简单的布尔响应（这个变体通常称为比较和设置），或通过返回从内存位置读取的值来完成（摘自维基本科）
+ 
 
 #### 11. ArrayBlockingQueue ， LinkedBlockingQueue， SynchronousQueue等堵塞队列的理解。
-```text
+- LinkedBlockingQueue
+    
+    LinkedBlockingQueue是使用比较多的队列，在SingleThreadPool(单个线程的线程池)、FixedThreadPool（固定线程数的线程池）使用的都是LinkedBlockingQueue。
+    
+    在LinkedBlockingQueue中有两个ReentrantLock，takeLock和putLock分别是在添加元素和取出元素的时候添加的锁。
+    
+    LinkedBlockingQueue是无界队列。
+    
+- ArrayBlockingQueue
+    
+    ArrayBlockingQueue是有界队列,在阿里的开源框架RocketMq中就使用到了，其添加和获取都是用的同一个ReentrantLock。
+    
+- SynchronousQueue
 
-```
+    SynchronousQueue是只有一个元素的队列
+    
+    - 添加和获取方法都用到了transfer方法。其实是根据是否有元素来区分是添加元素还是获取元素。
+    ```text
+    public boolean offer(E e) {
+        if (e == null) throw new NullPointerException();
+        return transferer.transfer(e, true, 0) != null;
+    }
+    
+    public E take() throws InterruptedException {
+        E e = transferer.transfer(null, false, 0);
+        if (e != null)
+            return e;
+        Thread.interrupted();
+        throw new InterruptedException();
+    }
+    ```
+    - 有两种元素添加获取方式，非公平获取和公平获取
+        
+        非公平用的是TransferStack，是后进先出的方式
+        
+        公平方式用的是TransferQueue，是先进先出方式
+    - 加锁是用的CAS的方式替换
+        
+        使用场景：在CachedThreadPool线程池中，使用到了SynchronousQueue。
+- ConcurrentLinkedQueue
+    
+    ConcurrentLinkedQueue数据结构进行了非常巧妙的设计，在添加是从tail节点，获取是从head节点，而且做到了方并发，因为不用锁，所以效率更高。
+    
+    在netty的读取byteBuffer和获取Selector中都用了ConcurrentLinkedQueue。
+- LinkedTransferQueue
+
+    LinkedTransferQueue是jdk才出现的队列，是LinkedBlockingQueue、SynchronousQueue、ConcurrentLinkedQueue的超集，实现了他们三个的功能，其添加和获取都是用的xfer方法。
+
 
 #### 12. ThreadPoolExecutor的传入参数及内部工作原理。
+线程池执行器
+ThreadPoolExecutor位于java.util.concurrent包，有4个带参数的构造方法。最终被调用的构造方法如下。其他构造方法只是提供了默认的ThreadFactory或者RejectedExecutionHandler作为参数。
 ```text
-
+public ThreadPoolExecutor(int corePoolSize,  //  核心线程的数量 当有新任务来到，当前运行的线程数少于corePoolSize的时候，ThreadPoolExecutor二话不说就启动一个新的线程来执行这个任务。
+                              int maximumPoolSize,  // 最大可运行的线程数量。当前运行的线程数量大于等于maximumPoolSize时，ThreadPoolExecutor将不会再创建新的线程。
+                              long keepAliveTime,  // 核心线程池等待时长限制。
+                              TimeUnit unit,   // keepAliveTime的时间单位
+                              BlockingQueue<Runnable> workQueue,
+                              ThreadFactory threadFactory,
+                              RejectedExecutionHandler handler)
 ```
+
+ThreadPoolExecutor的主要逻辑是，当用户调用execute(Runnable command) ，大致逻辑如下：
+1.  查看当前运行状态，如果不是RUNNING状态，将直接拒绝新任务。否则进入步骤2。
+2.  查看当前运行线程的数量，如果数量少于核心线程数，将直接创建新的线程执行该任务。否则进入步骤3。
+3.  将该任务添加到阻塞队列，等待核心线程执行完上一个任务再来获取。如果添加到阻塞队列失败，进入步骤4。
+4.  尝试创建一个非核心线程执行该任务，前提是线程的数量少于等于最大线程数。如果失败，拒绝该任务。
 
 #### 13. 分布式环境下，怎么保证线程安全。
-```text
+- 基于数据库实现的分布式锁
+- 基于排他锁实现的分布式锁
+- 基于缓存的分布式锁（Redis，memcached等）
+- 使用Zookeeper实现分布式锁
 
-```
 
 ## JVM相关问题
-- JVM内存机制
-- 介绍下垃圾回收机制，垃圾回收机制有哪些算法，各自的特点。
-- 聊聊GC， Major GC ，FullGC区别，垃圾收集器有哪些，他们的区别？
-- OutOfMemoryError  怎么处理
-- JVM调优有哪些参数
-- 自己写一个类叫 java.lang.String 类加载过程，双亲委派模型。
+
+#### 1. JVM内存结构，运行机制
+
+Java的内存结构： 
+- 方法区：常量池、变量等存储地方；（持久区）
+- 堆：实例对象存储地方；GC重点关照位置；（新生代和老年代）
+- 程序计数器：记录程序下一步指令；
+- Java方法栈：方法程序运行地方；Java栈总是与线程关联在一起的，每当创建一个线程，JVM就会为该线程创建对应的Java栈；
+- 本地方法栈：java方法与本地相关联
+
+JVM运行机制：JVM转入环境和配置（java.exe-->jvm.cfg）、装载JVM（通过LoadJavaVM来装载）、启动JVM获得本地调用接口、运行java程序；
+
+
+#### 2. 介绍下垃圾回收机制，垃圾回收机制有哪些算法，各自的特点。
+
+GC的对象是堆空间和永久区，防止内存泄漏。
+
+垃圾回收算法
+- **引用计数法**， 通过引用数量来回收垃圾。问题：引用和去引用 影响性能，很难处理循环引用。 没有被Java采用。
+- **标记清除法**， 现在垃圾回收算法的思想基础。
+- **标记压缩法**， 适用于存活对象较多的场合，如老年代。
+- **复制算法**，相对高效，不适合存活对象较多的场合，如老年代。问题，空间浪费。
+
+#### 3. 聊聊Minor GC、Major GC和Full GC之间的区别，垃圾收集器有哪些，他们的区别？
+Minor GC： 从年轻代空间（包括 Eden 和 Survivor 区域）回收内存
+Major GC： 清理老年代
+Full GC： 清理整个堆空间—包括年轻代和老年代
+
+垃圾收集器
+- Serial收集器 ：串行收集器是最古老，最稳定以及效率高的收集器，可能会产生较长的停顿，只使用一个线程去回收。新生代、老年代使用串行回收；新生代复制算法、老年代标记-压缩；垃圾收集的过程中会Stop The World（服务暂停） 
+- ParNew收集器 ： 其实就是Serial收集器的多线程版本。新生代并行，老年代串行；新生代复制算法、老年代标记-压缩。
+- Parallel收集器 ： 类似ParNew收集器，Parallel收集器更关注系统的吞吐量。
+- Parallel Old 收集器 ： Parallel Scavenge收集器的老年代版本，使用多线程和“标记－整理”算法。这个收集器是在JDK 1.6中才开始提供
+- CMS收集器 ： 是一种以获取最短回收停顿时间为目标的收集器。目前很大一部分的Java应用都集中在互联网站或B/S系统的服务端上，这类应用尤其重视服务的响应速度，希望系统停顿时间最短，以给用户带来较好的体验。
+- G1收集器 ： G1是目前技术发展的最前沿成果之一，HotSpot开发团队赋予它的使命是未来可以替换掉JDK1.5中发布的CMS收集器。与CMS收集器相比G1收集器有以下特点：1. 空间整合，2. 可预测停顿。
+
+#### 4. OutOfMemoryError  怎么处理
+导致OutOfMemoryError异常的常见原因有以下几种：
+- 内存中加载的数据量过于庞大，如一次从数据库取出过多数据；
+- 集合类中有对对象的引用，使用完后未清空，使得JVM不能回收；
+- 代码中存在死循环或循环产生过多重复的对象实体；
+- 使用的第三方软件中的BUG；
+- 启动参数内存值设定的过小；
+
+此错误常见的错误提示：
+- tomcat:java.lang.OutOfMemoryError: PermGen space
+- tomcat:java.lang.OutOfMemoryError: Java heap space
+- weblogic:Root cause of ServletException java.lang.OutOfMemoryError
+- resin:java.lang.OutOfMemoryError
+- java:java.lang.OutOfMemoryError
+
+解决java.lang.OutOfMemoryError的方法有如下几种：
+- 增加jvm的内存大小。
+- 优化程序，释放垃圾。
+
+重点排查以下几点：
+- 检查代码中是否有死循环或递归调用。
+- 检查是否有大循环重复产生新对象实体。
+- 检查对数据库查询中，是否有一次获得全部数据的查询。一般来说，如果一次取十万条记录到内存，就可能引起内存溢出。这个问题比较隐蔽，在上线前，数据库中数据较少，不容易出问题，上线后，数据库中数据多了，一次查询就有可能引起内存溢出。因此对于数据库查询尽量采用分页的方式查询。
+- 检查List、MAP等集合对象是否有使用完后，未清除的问题。List、MAP等集合对象会始终存有对对象的引用，使得这些对象不能被GC回收。
+
+#### 5. JVM调优有哪些参数
+
+#### 6. 自己写一个类叫 java.lang.String 类加载过程，双亲委派模型。
+
 ## 框架相关问题
 - SSM 
 - ORM
