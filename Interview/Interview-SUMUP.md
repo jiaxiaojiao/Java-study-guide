@@ -667,16 +667,41 @@ Full GC： 清理整个堆空间—包括年轻代和老年代
 - 分库分表，分库分表方案
 
 ## 其他
-- 分布式事务是怎么解决的？
-- 分布式Session方案
-- 设计一个秒杀场景
-- 怎么防止表单多次提交
-- Linux的基本操作命令
-- ElasticSearch的使用和原理
-- zookeeper的使用和原理
-- zookeeper 默认访问端口
-- JDK源码，看源码
-- 个人博客
-- 开源项目
+
+#### 1. 分布式事务是怎么解决的？
+
+#### 2. 分布式Session方案
+
+#### 3. 设计一个秒杀场景
+
+#### 4. 怎么防止表单多次提交
+
+#### 5. Linux的基本操作命令
+
+#### 6. ElasticSearch的使用和原理
+
+#### 7. zookeeper的使用和原理
+zookeeper是什么？
+官方说辞：Zookeeper 分布式服务框架是Apache Hadoop 的一个子项目，它主要是用来解决分布式应用中经常遇到的一些数据管理问题，如：统一命名服务、状态同步服务、集群管理、分布式应用配置项的管理等。
+ 
+ 
+
+#### 8. zookeeper 默认访问端口
+```text
+2181	/etc/zookeeper/conf/zoo.cfg中clientPort=<port>	对客户端提供服务的端口
+2888	/etc/zookeeper/conf/zoo.cfg中server.x=[hostname]:nnnnn[:nnnnn]，标蓝部分	follower用来连接到leader，只在leader上监听该端口。
+3888	/etc/zookeeper/conf/zoo.cfg中server.x=[hostname]:nnnnn[:nnnnn]，标蓝部分	用于leader选举的。只在electionAlg是1,2或3(默认)时需要。
+
+```
+
+
+#### 9. JDK源码，看源码
+挺喜欢看源码的。看用法，了解底层。
+
+#### 10. 个人博客
+https://github.com/jiaxiaojiao
+
+#### 11.开源项目
+无
 
 ## HR面试
