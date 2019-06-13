@@ -139,6 +139,7 @@
 - 非关系型数据库
     - [Redis](/DB/Redis.md)
     - [MongoDB](/DB/MongoDB.md)
+- [HBASE](/DB/HBase.md)
 
 ## [设计模式](Design-Pattern/Design-Pattern.md)
 - 原则

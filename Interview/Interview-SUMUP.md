@@ -621,23 +621,123 @@ Full GC： 清理整个堆空间—包括年轻代和老年代
 
 #### 5. JVM调优有哪些参数
 
+参数 | 说明
+--- | --- 
+-Xms | 初始堆的分配大小，默认为物理内存的六十四分之一
+-Xmx | 堆的最大分配大小（默认为物理内存的四分之一）
+-Xmn | 新生代的大小
+-XX:PermSize | 设置持久代(perm gen)初始值（物理内存的1/64）
+-XX:MaxPermSize | 设置持久代最大值（物理内存的1/4）
+
+
+
 #### 6. 自己写一个类叫 java.lang.String 类加载过程，双亲委派模型。
 
+类加载器就是根据指定全限定名称将class文件加载到JVM内存，转为Class对象。
+
+如果站在JVM的角度来看，只存在两种类加载器:
+- 启动类加载器（Bootstrap ClassLoader）：由C++语言实现（针对HotSpot）,负责将存放在<JAVA_HOME>\lib目录或-Xbootclasspath参数指定的路径中的类库加载到内存中。
+- 其他类加载器：由Java语言实现，继承自抽象类ClassLoader。如：
+    - 扩展类加载器（Extension ClassLoader）：负责加载<JAVA_HOME>\lib\ext目录或java.ext.dirs系统变量指定的路径中的所有类库。
+    - 应用程序类加载器（Application ClassLoader）。负责加载用户类路径（classpath）上的指定类库，我们可以直接使用这个类加载器。一般情况，如果我们没有自定义类加载器默认就是用这个加载器。
+
+双亲委派模型工作过程是：如果一个类加载器收到类加载的请求，它首先不会自己去尝试加载这个类，而是把这个请求委派给父类加载器完成。每个类加载器都是如此，只有当父加载器在自己的搜索范围内找不到指定的类时（即ClassNotFoundException），子加载器才会尝试自己去加载。
+
+双亲委派模型的原理很简单，实现也简单。每次通过先委托父类加载器加载，当父类加载器无法加载时，再自己加载。其实ClassLoader类默认的loadClass方法已经帮我们写好了，我们无需去写。
+
 ## 框架相关问题
-- SSM 
-- ORM
-- Spring使用了哪些设计模式？
-- Spring注入bean的方式
-- 对Spring IOC 和 Spring AOP的理解
-- Spring事务隔离级别和传播机制
-- Mybatis的缓存机制（一级缓存和二级缓存）
-- Mybatis的mapper文件中 # $ 的区别
-- Spring MVC的流程
-- Spring 和 Spring Boot的区别
-- 对SpringBoot的理解
-- RPC框架有哪些，他们的区别？
-- Dubbo的使用和理解
-- Spring Cloud的使用和组件，谈谈你的理解。
+#### 1. SSM
+Spring+SpringMVC+MyBatis
+
+Spring 
+> 轻量级的 [控制反转IoC](Spring-IoC.md) 和 [面向切面AOP](Spring-AOP.md) 的容器框架。
+- **轻量**： 从大小和开销两方面而言，Spring都是轻量的。 1MB
+- **控制反转**： Spring通过一种控制反转IOC技术促进了松耦合。当应用了IOC 一个对象依赖的其他对象会通过被动的方式传递进来，而不是这个对象自己创建或者查找依赖对象。
+- **面向切面**： Spring提供了面向切面编程的丰富支持，允许通过分离应用的业务逻辑与系统级服务进行内聚性的开发。
+- **容器**： Spring 包含并管理应用对象的配置和生命周期。 
+
+SpringMVC 
+> Spring MVC 分离了控制器、模型对象、分派器以及处理程序对象的角色，这种分离让它们更容易进行定制。
+
+MyBatis
+> MyBatis是一个基于Java的持久层框架。
+MyBatis 消除了几乎所有的JDBC代码和参数的手工设置以及结果集的检索。
+MyBatis 使用简单的 XML或注解用于配置和原始映射，将接口和 Java 的POJOs（Plain Old Java Objects，普通的 Java对象）映射成数据库中的记录。
+
+#### 2. ORM
+对象关系映射
+
+Java典型的ORM中间件有:Hibernate,Mybatis。 
+
+
+#### 3. Spring使用了哪些设计模式？
+- 工厂模式，这个很明显，在各种BeanFactory以及ApplicationContext创建中都用到了；
+- 模版模式，这个也很明显，在各种BeanFactory以及ApplicationContext实现中也都用到了；
+- 代理模式，在Aop实现中用到了JDK的动态代理；
+- 单例模式，这个比如在创建bean的时候。
+
+#### 4. Spring注入bean的方式
+bean配置有三种方法：
+- 基于xml配置Bean
+- 使用注解定义Bean
+- 基于java类提供Bean定义信息
+
+bean注入：
+- 在xml文件中配置依赖注入
+- 构造方法注入
+- 使用注解的方式注入（@Autowired ）
+
+
+#### 5. 对Spring IOC 和 Spring AOP的理解
+控制反转（IoC）
+> 控制反转模式（也称作依赖性介入）的基本概念是：不创建对象，但是描述创建它们的方式。在代码中不直接与对象和服务连接，但在配置文件中描述哪一个组件需要哪一项服务。容器 （在 Spring 框架中是 IOC 容器） 负责将这些联系在一起。
+
+好处： 
+1. 便于管理
+2. 降低了使用资源双方的依赖程度，降低了耦合度。
+
+面向切面(AOP)
+> 面向方面的编程，即 AOP，是一种编程技术，它允许程序员对横切关注点或横切典型的职责分界线的行为（例如日志和事务管理）进行模块化。AOP 的核心构造是方面，它将那些影响多个类的行为封装到可重用的模块中。
+
+
+#### 6. Spring事务隔离级别和传播机制
+
+#### 7. Mybatis的缓存机制（一级缓存和二级缓存）
+
+#### 8. Mybatis的mapper文件中 # $ 的区别
+```text
+#{}是预编译处理，${}是字符串替换。
+Mybatis在处理#{}时，会将sql中的#{}替换为?号，调用PreparedStatement的set方法来赋值；
+Mybatis在处理${}时，就是把${}替换成变量的值。
+使用#{}可以有效的防止SQL注入，提高系统安全性。
+```
+
+#### 9. Spring MVC的流程
+```text
+前端控制器接收发过来的请求
+=> 根据请求路径找到相应拦截器或Controller
+=> 处理一些功能请求，返回一个ModelAndView对象（包括模型数据、逻辑视图名）
+=> 解析具体视图
+=> 数据渲染到View上
+
+```
+
+#### 10. Spring 和 Spring Boot的区别
+Spring Boot只是Spring本身的扩展，使开发，测试和部署更加方便
+
+#### 11. 对SpringBoot的理解
+
+#### 12. RPC框架有哪些，他们的区别？
+RPC是远程过程调用的简称，广泛应用在大规模分布式应用中，作用是有助于系统的垂直拆分，使系统更易拓展。
+
+Dubbo
+
+
+
+#### 13. Dubbo的使用和理解
+
+#### 14. Spring Cloud的使用和组件，谈谈你的理解。
+
 ## 消息中间件
 - MQ 消息队列
 - Kafka

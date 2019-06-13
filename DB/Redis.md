@@ -89,6 +89,9 @@ slave同时开启Snapshot和AOF来进行持久化，保证数据的安全性
 
 Raft算法核心: 可视图
 
+## RedLock 分布式锁
+[RedLock](Redis-RedLock.md)
+
 ## 其他
     redis在业务上可以实现哪些功能
     redis基本操作命令，设置过期时间。
