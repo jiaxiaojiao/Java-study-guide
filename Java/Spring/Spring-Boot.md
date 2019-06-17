@@ -95,5 +95,7 @@ spring.datasource.initial-size=5
 1. 覆盖属性只对继承有效。修改Spring Boot的依赖组件版本可能会导致不兼容的问题。
 2. 资源文件过滤问题。
 
+## 构建Spring Boot的简单实例
+- [构建Spring Boot](Spring-Boot-Build.md)
 
 ## [关于Spring Boot的几个问题](Spring-Boot-2.md)

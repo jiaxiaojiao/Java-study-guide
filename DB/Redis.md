@@ -27,6 +27,11 @@ Hashes  : zadd,zrange,zrem,zcard
 ```
 这些数据类型都支持push/pop、add/remove及取交集并集和差集及更丰富的操作。
 
+- 设置过期时间
+
+    语法：redis.expire(key, expiration)
+
+
 ## Redis 适合的场景
 [Redis的常见应用场景](Redis-Context-of-Use.md)
 
@@ -91,13 +96,6 @@ Raft算法核心: 可视图
 
 ## RedLock 分布式锁
 [RedLock](Redis-RedLock.md)
-
-## 其他
-    redis在业务上可以实现哪些功能
-    redis基本操作命令，设置过期时间。
-    Redis的值超过了Long类型的最大值怎么办
-    10G的文件里面存储有序的数字，内存4G，如何找到指定的数字，不适用MapReduce方式。
-
 
 
 
