@@ -20,7 +20,7 @@ double | 基本数据类型之一，双精度浮点数类型
 else | 用在条件语句中，表明当条件不成立时的分支
 enum | 枚举
 extends | 表明一个类型是另一个类型的子类型，这里常见的类型有类和接口
-[final](keyword-final.md) | 用来说明最终属性，表明一个类不能派生出子类，或者成员方法不能被覆盖，或者成员域的值不能被改变，用来定义常量
+[final](final.md) | 用来说明最终属性，表明一个类不能派生出子类，或者成员方法不能被覆盖，或者成员域的值不能被改变，用来定义常量
 finally | 用于处理异常情况，用来声明一个基本肯定会被执行到的语句块
 float | 基本数据类型之一，单精度浮点数类型
 for | 一种循环结构的引导词
@@ -40,18 +40,18 @@ protected | 一种访问控制方式：保护模式
 public | 一种访问控制方式：共用模式
 return | 从成员方法中返回数据
 short | 基本数据类型之一,短整数类型
-[static](keyword-static.md) | 表明具有静态属性
+[static](static.md) | 表明具有静态属性
 strictfp | 用来声明FP_strict（单精度或双精度浮点数）表达式遵循IEEE 754算术规范 [1] 
 super | 表明当前对象的父类型的引用或者父类型的构造方法
-[switch](keyword-switch.md) | 分支语句结构的引导词
-[synchronized](keyword-synchronized.md) | 表明一段代码需要同步执行
+[switch](switch.md) | 分支语句结构的引导词
+[synchronized](synchronized.md) | 表明一段代码需要同步执行
 this | 指向当前实例对象的引用
 throw | 抛出一个异常
-[throws](keyword-throws.md) | 声明在当前定义的成员方法中所有需要抛出的异常
+[throws](throws.md) | 声明在当前定义的成员方法中所有需要抛出的异常
 transient | 声明不用序列化的成员域
 try | 尝试一个可能抛出异常的程序块
 void | 声明当前成员方法没有返回值
-[volatile](keyword-volatile.md) | 表明两个或者多个变量必须同步地发生变化
+[volatile](volatile.md) | 表明两个或者多个变量必须同步地发生变化
 while | 用在循环结构中
 
 ## 其他
