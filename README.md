@@ -121,7 +121,7 @@
 - 算法
     - 搜索算法
     - 排序算法
-        - [冒泡排序](/Algorithm/Sorting-Algorithm/Bubble-Sort.md)
+        - [冒泡排序](/Data-Structure/Sorting-Algorithm/Bubble-Sort.md)
 
 ## 数据库 DB
 - 关系型数据库
