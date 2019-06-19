@@ -18,7 +18,7 @@
 File > Settings.../快捷键 Ctrl+Alt+S > Appearance & Behavior > Appearance
 ```
 
-## [快捷键](./idea-shortcut.md)
+## [快捷键](idea-shortcut-Windows.md)
 
  
 ## 插件 plugins
