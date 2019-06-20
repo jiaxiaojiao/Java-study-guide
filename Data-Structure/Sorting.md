@@ -37,35 +37,36 @@
     - 稳定排序法
     - 空间复杂度为最佳，只需一个额外空间 O(1) 
 
-- 选择排序法 Selection Sort 
+- [选择排序法 Selection Sort](Sorting-Algorithm/Selection-Sort.md) 
 
     - 不稳定排序法
     - 空间复杂度为最佳，只需一个额外空间 O(1) 
     
-- 插入排序法 Insertion Sort
+- [插入排序法 Insertion Sort](Sorting-Algorithm/Insertion-Sort.md)
 
     - 稳定排序法
     - 空间复杂度为最佳，只需一个额外空间 O(1) 
 
-- 希尔排序法 Shell Sort 
+- [希尔排序法 Shell Sort](Sorting-Algorithm/Shell-Sort.md) 
 
     - 稳定排序法
     - 空间复杂度为最佳，只需一个额外空间 O(1) 
 
+- [合并排序法 Merge Sort](Sorting-Algorithm/Merge-Sort.md)
 
 **高级排序法：**
 
-- 快速排序法 Quick Sort
+- [快速排序法 Quick Sort](Sorting-Algorithm/Quick-Sort.md)
 
     - 不稳定排序法
     - 空间复杂度最差为 O(n)，最佳为 O(log<sub>2</sub>n)
 
-- 堆积排序法 Heap Sort 
+- [堆积排序法 Heap Sort](Sorting-Algorithm/Heap-Sort.md) 
 
     - 不稳定排序法
     - 空间复杂度为最佳，只需一个额外空间 O(1) 
 
-- 基数排序法 Radix Sort 
+- [基数排序法 Radix Sort](Sorting-Algorithm/Radix-Sort.md) 
 
     - 稳定排序法
     - 空间复杂度为 O(np) ， n为原始数据的个数，p为基底。

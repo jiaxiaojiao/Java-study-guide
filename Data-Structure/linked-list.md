@@ -21,13 +21,3 @@
 - 每个节点可以指向上一个节点，也可以指向下一个节点。
 ![image](./image/linked-list-3.png)
 
-## 其他
-```text
-http://www.cnblogs.com/ysocean/p/7928988.html
-https://www.cnblogs.com/whgk/p/6589920.html
-https://blog.csdn.net/weixin_39471249/article/details/79729065
-https://blog.csdn.net/zjsxxzh/article/details/75102058
-http://blog.51cto.com/13047263/2070815
-https://www.jb51.net/article/128730.htm
-http://www.cnblogs.com/whgk/p/6589920.html
-```
