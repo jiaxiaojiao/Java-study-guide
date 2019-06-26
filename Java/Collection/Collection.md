@@ -16,5 +16,5 @@
 
  
 ## 拓展
-- [ArrayList 的 subList 使用注意事项](List-ArrayList.md) 
-- [有序集合对比 ArrayList LinkedList Vector](List-ArrayList.md)
+- [ArrayList 的 subList 使用注意事项](List-ArrayList.md#1-arraylist中的sublist) 
+- [有序集合对比 ArrayList LinkedList Vector](List-ArrayList.md#2-对比-arraylist和linkedlist-vector)
