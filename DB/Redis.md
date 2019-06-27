@@ -1,10 +1,37 @@
 # Redis
 
+## Redis常见面试题
+- [redis 简介](Redis.md#Redis简介)
+- [为什么要用 redis/为什么要用缓存]()
+- [为什么要用 redis 而不用 map/guava 做缓存?]()
+- [redis 和 memcached 的区别]()
+- [redis 常见数据结构以及使用场景分析]()
+    - [String]()
+    - [Hash]()
+    - [List]()
+    - [Set]()
+    - [Sorted Set]()
+- [redis 设置过期时间]()
+- [redis 内存淘汰机制(MySQL里有2000w数据，Redis中只存20w的数据，如何保证Redis中的数据都是热点数据?)]()
+- [redis 持久化机制(怎么保证 redis 挂掉之后再重启数据可以进行恢复)]()
+- [redis 事务]()
+- [缓存雪崩和缓存穿透问题解决方案]()
+- [如何解决 Redis 的并发竞争 Key 问题]()
+- [如何保证缓存与数据库双写时的数据一致性?]()
+
+
+## Redis简介
 > 本质上是一个key-value 的NoSQL非关系型数据库，内存数据库，整个数据库系统加载在内存当中进行操作，定期通过异步操作把数据库数据flush到硬盘上进行保存。
 
-Redis 5.0.5     Released Wed May 15 17:57:41 CEST 2019
+最新版本： 
 
-Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。 它支持多种类型的数据结构，如 字符串（strings）， 散列（hashes）， 列表（lists）， 集合（sets）， 有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询。 Redis 内置了 复制（replication），LUA脚本（Lua scripting）， LRU驱动事件（LRU eviction），事务（transactions） 和不同级别的 磁盘持久化（persistence）， 并通过 Redis哨兵（Sentinel）和自动 分区（Cluster）提供高可用性（high availability）。
+    Redis 5.0.5     Released Wed May 15 17:57:41 CEST 2019
+
+Redis 是一个开源（BSD许可）的，内存中的数据结构存储系统，它可以用作数据库、缓存和消息中间件。 
+
+它支持多种类型的数据结构，如 字符串（strings）， 散列（hashes）， 列表（lists）， 集合（sets）， 有序集合（sorted sets） 与范围查询， bitmaps， hyperloglogs 和 地理空间（geospatial） 索引半径查询。 
+
+Redis 内置了 复制（replication），LUA脚本（Lua scripting）， LRU驱动事件（LRU eviction），事务（transactions） 和不同级别的 磁盘持久化（persistence）， 并通过 Redis哨兵（Sentinel）和自动 分区（Cluster）提供高可用性（high availability）。
 
 ## 安装Redis
 
