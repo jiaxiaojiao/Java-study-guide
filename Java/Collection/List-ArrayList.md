@@ -31,18 +31,26 @@ SubList只是ArrayList的内部类，他们之间并没有继承关系，故无�
 - 对父List做结构性修改，会抛出异常ConcurrentModificationException。
 
 #### 2. 对比 ArrayList和linkedList Vector
-都实现了List接口。
-- ArrayList
- - 底层使用数组，内存中开辟一块连续的空间来存储，数据存储是连续的，支持下标来访问元素。
- - 更多元素添加进来时会请求更大的空间，每次对size增长50%。
- - 非线程安全。
- - 使用在查询多，插入删除比较少的场景。数组查询查询特定元素比较快。
-- Vector 
- - 与ArrayList几乎相同，但是Vector是线程安全的。synchronize 同步。性能较差。
- - 更多元素添加进来时会请求更大的空间，每次请求其大小的双倍空间。
-- LinkedList 
-- 底层使用双向链表。使用在查询少，插入删除比较多的场景。
-- 非线程安全
+1. 是否保证线程安全
+    - ArrayList 方法是不同步的，也就是非线程安全。
+    - LinkedList 方法是不同步的，也就是非线程安全。
+    - Vector synchronize同步，是线程安全。性能较差。
+2. 底层数据结构
+    - Arraylist 底层使用的是 Object 数组。
+    - LinkedList 底层使用的是 双向链表（JDK1.6之前为循环链表，JDK1.7取消了循环）
+    - Vector 跟ArrayList一样，底层使用的是数组。
+3. 插入和删除是否受元素位置的影响
+    - ArrayList 采用数组存储，所以插入和删除元素的时间复杂度受元素位置的影响。 比如：执行add(E e) 方法的时候， ArrayList 会默认在将指定的元素追加到此列表的末尾，这种情况时间复杂度就是O(1)。但是如果要在指定位置 i 插入和删除元素的话（add(int index, E element) ）时间复杂度就为 O(n-i)。因为在进行上述操作的时候集合中第 i 和第 i 个元素之后的(n-i)个元素都要执行向后位/向前移一位的操作。 
+    - LinkedList 采用链表存储，所以插入，删除元素时间复杂度不受元素位置的影响，都是近似 O（1）而数组为近似 O（n）
+    - Vector 跟ArrayList一样。
+4. 是否支持快速随机访问（快速随机访问就是通过元素的序号快速获取元素对象(对应于get(int index) 方法)。）
+    - ArrayList 支持快速随机访问
+    - LinkedList 不支持高效的随机元素访问。
+    - Vector 跟ArrayList一样。
+5. 内存空间占用
+    - ArrayList的空间浪费主要体现在在list列表的结尾会预留一定的容量空间。更多元素添加进来时会请求更大的空间，每次对size增长50%。
+    - LinkedList的空间花费则体现在它的每一个元素都需要消耗比ArrayList更多的空间（因为要存放直接后继和直接前驱以及数据）。
+    - Vector 更多元素添加进来时会请求更大的空间，每次请求其大小的双倍空间。
 
 
 

@@ -1,26 +1,22 @@
 # HashMap
 
-- 实现Map接口，元素以键值对的方式存储
-- Key和Value 都允许为空。Key不允许重复，只能有一个Key为null。
-- 不能保证放入元素的顺序，无序。
-- 非线程安全。
-
 ## 底层实现和原理
-#### JDK1.8之前的HashMap
-1. 数据结构哈希表（数组+链表）
-2. 默认大小 16
+**1.7版本的HashMap**：
+1. 数据结构：数组+链表。 数组是主体，链表是为了解决哈希冲突。
+2. 默认大小：16
 3. 达到总容量的0.75，数组扩容。
-4. 存储元素，首先计算hashcode，计算数组的索引值，对应索引没有元素直接添加，有元素equals比较key如果相等就覆盖 不相等后加的放在前面。
+4. 存储元素，首先计算 key 的 hashcode，计算数组的索引值/元素存放的位置，对应索引没有元素直接添加，有元素equals比较内容如果相等就覆盖 不相等后加的放在前面。
 5. 效率低
 
 
-#### JDK1.8之后的HashMap
-1. 数据结构：数组+链表+红黑树
-2. 碰撞元素>8 & 总容量大于64，引入红黑树。
+**1.8之后的HashMap**： 
+1. 数据结构：数组+链表+红黑树。  
+2. 链表长度/碰撞元素 大于阈值（默认为8），引入红黑树。 减少搜索时间。
 3. 末尾插入。
-4. 效率高。
+4. 效率高
 
 ![image](image/map-hashmap-1.png)
+
 
 
 ## 常用方法
@@ -104,12 +100,80 @@ final Node<K,V> getNode(int hash, Object key) {
 3. 另外从put与get的源码可以看到HashMap的Key与Value都允许为null，同时可以看到HashMap中的put与get方法均无synchronized关键字修饰，即HashMap不是线程安全的。
 4. HashMap中的元素是唯一的（即同一个key只存在唯一的V与之对应），因为在put的过程中如果可能出现相同元素（K相同V不同），则原来的V将会被替换。
 
-## 其他
-```text
-https://www.jianshu.com/p/3bf097f4cf0a
-https://blog.csdn.net/P_Doraemon/article/details/80353579
-https://blog.csdn.net/yinbingqiu/article/details/60965080
-https://www.cnblogs.com/wxw7blog/p/7722274.html
-https://www.cnblogs.com/java-jun-world2099/p/9258605.html
+## 扩展
+- **HashMap能不能排序**
+  
+  ```text
+  HashMap无序。
+  如果要对HashMap进行排序，可以借助List集合。keySet()/entrySet()
+  ```
+  
+- **HashMap的长度为什么是2的幂次方**
+  
+  ```text
+  为了提升性能。
+  当 array.length长度是2的次幂时，key.hashcode % array.length等于key.hashcode & (array.length - 1)
+  
+  好处： 
+  1. 能利用 与运算& 操作代替 取模运算% 操作，提升性能
+  2. 数组扩容时，仅仅关注 “特殊位” 就可以重新定位元素
+  ```
+  
+- **HashMap 和 HashSet区别**
+  
+  HashSet 底层就是基于 HashMap 实现的。（HashSet 的源码非常非常少，因为除了 clone() 、writeObject()、readObject()是 HashSet 自己不得不实现之外，其他方法都是直接调用 HashMap 中的方法。
+  
+  HashMap | HashSet
+  --- | --- 
+  实现了Map接口 | 实现Set接口
+  存储键值对 | 仅存储对象
+  调用 put（）向map中添加元素 | 调用 add（）方法向Set中添加元素
+  HashMap使用键（Key）计算Hashcode | HashSet使用成员对象来计算hashcode值，<br>对于两个对象来说hashcode可能相同，<br>所以equals()方法用来判断对象的相等性，
 
-```
+- **ConcurrentHashMap 和 HashTable的区别**
+
+    ConcurrentHashMap 和 Hashtable 的区别主要体现在实现线程安全的方式上不同。
+  
+    - 【底层数据结构】
+        - JDK1.7的 ConcurrentHashMap 底层采用 分段的数组+链表 实现
+        - JDK1.8 采用的数据结构跟HashMap1.8的结构一样，数组+链表/红黑二叉树。
+        - HashTable 和 JDK1.8 之前的 HashMap 的底层数据结构类似都是采用 数组+链表 的形式，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的；
+    - 【实现线程安全的方式】
+        - 在JDK1.7的时候，ConcurrentHashMap（分段锁） 对整个桶数组进行了分割分段(Segment)，每一把锁只锁容器其中一部分数据，多线程访问容器里不同数据段的数据，就不会存在锁竞争，提高并发访问率。 
+        - JDK1.8 的时候已经摒弃了Segment的概念，而是直接用 Node 数组+链表+红黑树的数据结构来实现，并发控制使用 synchronized 和 CAS 来操作。（JDK1.6以后 对 synchronized锁做了很多优化） 整个看起来就像是优化过且线程安全的 HashMap，虽然在JDK1.8中还能看到 Segment 的数据结构，但是已经简化了属性，只是为了兼容旧版本。
+        - Hashable(同一把锁) :使用 synchronized 来保证线程安全，效率非常低下。当一个线程访问同步方法时，其他线程也访问同步方法，可能会进入阻塞或轮询状态，如使用 put 添加元素，另一个线程不能使用 put 添加元素，也不能使用 get，竞争会越来越激烈效率越低。
+  
+- **ConcurrentHashMap线程安全的具体实现方式/底层具体实现**
+    - JDK1.7 
+        - 首先将数据分为一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据时，其他段的数据也能被其他线程访问。ConcurrentHashMap 是由 Segment 数组结构和 HashEntry 数组结构组成。Segment 实现了 ReentrantLock,所以 Segment 是一种可重入锁，扮演锁的角色。HashEntry 用于存储键值对数据。static class Segment<K,V> extends ReentrantLock implements Serializable {} 一个 ConcurrentHashMap 里包含一个 Segment 数组。Segment 的结构和HashMap类似，是一种数组和链表结构，一个 Segment 包含一个 HashEntry 数组，每个 HashEntry 是一个链表结构的元素，每个 Segment 守护着一个HashEntry数组里的元素，当对 HashEntry 数组的数据进行修改时，必须首先获得对应的 Segment的锁。
+    - JDK1.8
+        - ConcurrentHashMap取消了Segment分段锁，采用CAS和synchronized来保证并发安全。数据结构跟HashMap1.8的结构类似，数组+链表/红黑二叉树。Java 8在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为O(N)）转换为红黑树（寻址时间复杂度为O(long(N))） synchronized只锁定当前链表或红黑二叉树的首节点，这样只要hash不冲突，就不会产生并发，效率又提升N倍。
+
+HashTable 
+
+![image](image/Map-HashTable-1.jpg)
+
+JDK1.7的ConcurrentHashMap
+
+![image](image/Map-ConcurrentHashMap-1.png)
+
+JDK1.8的ConcurrentHashMap（TreeBin: 红黑二叉树节点 Node: 链表节点）
+
+![image](image/Map-ConcurrentHashMap-2.png)
+
+   
+- **HashMap 和 Hashtable 的区别**
+    - 【线程是否安全】
+        - HashMap 是非线程安全的。
+        - HashTable 是线程安全的。HashTable 内部的方法基本都经过synchronized 修饰。
+        - （如果你要保证线程安全的话就使用 ConcurrentHashMap ）。
+    - 【效率】
+        - 因为线程安全的问题，HashMap 要比 HashTable 效率高一点。
+        - HashTable 基本被淘汰，不要在代码中使用它。
+    - 【对Null key 和Null value的支持】
+        - HashMap 中，null 可以作为键，这样的键只有一个，可以有一个或多个键所对应的值为 null。
+        - HashTable 中 put 进的键值只要有一个 null，直接抛出 NullPointerException。
+    - 【初始容量大小和每次扩充容量大小的不同】 
+        - 创建时如果不指定容量初始值，Hashtable 默认的初始大小为11，之后每次扩充，容量变为原来的2n+1。HashMap 默认的初始化大小为16。之后每次扩充，容量变为原来的2倍。
+        - 创建时如果给定了容量初始值，那么 Hashtable 会直接使用你给定的大小，而 HashMap 会将其扩充为2的幂次方大小。
+        - 底层数据结构： JDK1.8 以后的 HashMap 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为8）时，将链表转化为红黑树，以减少搜索时间。Hashtable 没有这样的机制。  
