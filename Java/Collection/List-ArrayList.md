@@ -16,7 +16,7 @@ subList是List接口中定义的一个方法，该方法主要用于返回一个
 
 原因： 
 
-subList 方法返回的是一个视图。返回了一个类SubList，这个类是ArrayList的一个内部类。内部类SubList的构造函数SubList把原来的List和部分属性直接赋值给了自己。也就是说，SubList并没有重新创建一个List，而是直接引用了原有的List（返回了父类的视图），只是指定了范围（从fromIndexb包括 到 toIndex不包括）。
+subList 方法返回的是一个视图。返回了一个类SubList，这个类是ArrayList的一个内部类。内部类SubList的构造函数SubList把原来的List和部分属性直接赋值给了自己。也就是说，SubList并没有重新创建一个List，而是直接引用了原有的List（返回了父类的视图），只是指定了范围（从fromIndex包括 到 toIndex不包括）。
 
 SubList只是ArrayList的内部类，他们之间并没有继承关系，故无法直接进行强制类型转换。
 

@@ -38,6 +38,11 @@ LinkedList：
 - 底层： 使用双向链表
 - 场景： 使用在查询少，插入删除比较多的场景。
 
+## Set
+[TreeSet](Set-TreeSet.md):
+- 底层： 红黑树
+- 有序，默认升序。
+
 
 ## Map
 
@@ -74,13 +79,17 @@ ConcurrentHashMap：
 
  
 ## 拓展
-- [ArrayList 的 subList 使用注意事项](List-ArrayList.md#1-arraylist中的sublist) 
+- [ArrayList 的 subList 使用注意事项](List-ArrayList.md#1-arraylist中的sublist)
+ 
 - [有序集合对比 ArrayList LinkedList Vector](List-ArrayList.md#2-对比-arraylist和linkedlist-vector)
+
 - **1.7版本和1.8版本的ConcurrentHashMap的区别**
+
   **1.8之后的ConcurrentHashMap**： 
   1. 取消 segments 字段，直接采用 transient volatile HashEntry<K,V>[] table保存数据，采用table数组元素作为锁，从而实现了对每一行数据进行加锁，进一步减少并发冲突的概率。
   2. 数组结构： 数组+链表+红黑树。
   3. 效率高
+  
 - Map相关方法的底层实现原理
   - Map底层实现的基础是数组和链表，通过数组的方式存储Map的每个元素。
   - 新增 put(Object key, Object value) ，新创建的Map对象设置为myMap数组的最后一个，让数组的长度加一。
