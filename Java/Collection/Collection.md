@@ -60,7 +60,7 @@ HashTable：
 - Key/Value不允许为null。
 - 继承Dictionary，线程安全，效率慢。
 
-LinkedHashMap：
+[LinkedHashMap](Map-LinkedHashMap.md):
 - 继承自HashMap
 - 底层： 数组+链表/红黑树 
 - 增加了双向链表，保存了记录的插入顺序。
