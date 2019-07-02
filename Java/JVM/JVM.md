@@ -2,6 +2,7 @@
 > Java Virtual Machine
 
 ## JVM内存模型
+
 #### JDK1.7
 1. 程序计数器
 2. Java虚拟机栈

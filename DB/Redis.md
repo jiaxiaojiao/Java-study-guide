@@ -1,26 +1,6 @@
 # Redis
 
-## Redis常见面试题
-- [redis 简介](#Redis简介)
-- [为什么要用 redis/为什么要用缓存](#为什么要用Redis)
-- [为什么要用 redis 而不用 map/guava 做缓存?](#为什么不用map做缓存)
-- [redis 和 memcached 的区别](#Redis和Memcached的区别)
-- [redis 常见数据结构以及使用场景分析](#Redis的数据类型)
-    - String
-    - Hash
-    - List
-    - Set
-    - Sorted Set
-- [redis 设置过期时间](#Redis设置过期时间)
-- [redis 内存淘汰机制(MySQL里有2000w数据，Redis中只存20w的数据，如何保证Redis中的数据都是热点数据?)](#Redis数据淘汰机制)
-- [redis 持久化机制/存储策略(怎么保证 redis 挂掉之后再重启数据可以进行恢复)](Redis-Persistence.md)
-- [redis 事务]()
-- [缓存雪崩和缓存穿透问题解决方案]()
-- [如何解决 Redis 的并发竞争 Key 问题]()
-- [如何保证缓存与数据库双写时的数据一致性?]()
-
-
-## Redis简介
+ ## Redis简介
 > 本质上是一个key-value 的NoSQL非关系型数据库，内存数据库，整个数据库系统加载在内存当中进行操作，定期通过异步操作把数据库数据flush到硬盘上进行保存。
 
 最新版本： 
@@ -36,6 +16,9 @@ Redis 内置了 复制（replication），LUA脚本（Lua scripting）， LRU驱
 ## 安装Redis
 
 > 默认端口6379
+
+为什么选择6379作为默认端口：6379在手机按键上MERZ对应的号码，而MERZ取自意大利歌女Alessia Merz的名字。MERZ长期以来被antirez及其朋友当做愚蠢的代名词。
+
 
 - [Linux下安装Redis](Redis-InstallL.md)
 
@@ -69,7 +52,7 @@ Redis 内置了 复制（replication），LUA脚本（Lua scripting）， LRU驱
     - Memcached支持简单的数据类型： 文本型（String）、二进制类型（新版本加的）
 
 2. 持久化
-    - Redis支持持久化： 可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用。
+    - Redis支持持久化： 可以将内存中的数据保持在磁盘中。重启机器、机器故障之后恢复数据。
     - Memcached支持持久化： 把数据全部存在内存中。
 
 3. 集群模式
@@ -99,32 +82,70 @@ Redis 内置了 复制（replication），LUA脚本（Lua scripting）， LRU驱
 
 这些数据类型都支持push/pop、add/remove及取交集并集和差集及更丰富的操作。
 
+Redis底层数据结构：
+
+编码常量 | 编码所对应的底层数据结构
+--- | ---
+REDIS_ENCODING_INT | long 类型的整数
+REDIS_ENCODING_EMBSTR | embstr 编码的简单动态字符串
+REDIS_ENCODING_RAW | 简单动态字符串
+REDIS_ENCODING_HT | 字典
+REDIS_ENCODING_LINKEDLIST | 双端链表
+REDIS_ENCODING_ZIPLIST | 压缩列表
+REDIS_ENCODING_INTSET | 整数集合
+REDIS_ENCODING_SKIPLIST | 跳跃表和字典
+
+
+
 - 字符串 String 
     - 常用命令： set, get, decr, incr, mget
     - 描述： 常规key-value类型，value可以是String或数字。
     - 场景： 常规key-value缓存、微博数、粉丝数等。
+    - 底层实现： 字符串对象的编码可以是int、raw或者embstr。
+      - 如果一个字符串的内容可以转换为long，那么该字符串就会被转换成为long类型，对象的ptr就会指向该long，并且对象类型也用int类型表示。
+      - 普通的字符串有两种，embstr和raw。embstr应该是Redis 3.0新增的数据结构,在2.8中是没有的。如果字符串对象的长度小于39字节，就用embstr对象。否则用传统的raw对象。
+      - embstr的创建只需分配一次内存，而raw为两次。
+      
     
 - 散列 Hash
     - 常用命令： hget, hset, hgetall
     - 描述： 是一个String类型的field和value的映射表
     - 场景： 适合存储对象
+    - 底层实现： 哈希对象的底层实现可以是ziplist或者hashtable。
+        - ziplist中的哈希对象是按照key1,value1,key2,value2这样的顺序存放来存储的。当对象数目不多且内容不大时，这种方式效率是很高的。
+        - hashtable的是由dict这个结构来实现的
+            
+            
     
 - 列表 List 
     - 常用命令： lpush, rpush, lpop, rpop, lrange
     - 描述： 链表。可以实现双向链表，支持反向查找和遍历。
     - 场景： 微博关注列表，粉丝列表，消息列表，lrange命令实现分页查询。
+    - 底层实现： 列表对象的编码可以是ziplist或者linkedlist。
+        - ziplist是一种压缩链表，它的好处是更能节省内存空间，因为它所存储的内容都是在连续的内存区域当中的。当列表对象元素不大，每个元素也不大的时候，就采用ziplist存储。但当数据量过大时就ziplist就不是那么好用了。因为为了保证他存储内容在内存中的连续性，插入的复杂度是O(N)，即每次插入都会重新进行realloc。
+        - linkedlist是一种双向链表。它的结构比较简单，节点中存放pre和next两个指针，还有节点相关的信息。当每增加一个node的时候，就需要重新malloc一块内存。      
     
 - 集合 Set
     - 常用命令： sadd, spop, smembers, sunion
     - 描述： 类似于List的列表，特殊之处在于Set可以自动排序。可以基于 set 轻易实现交集、并集、差集的操作。
     - 场景： 微博关注人和粉丝，可以方便实现共同关注 共同粉丝等功能。
+    - 底层实现： 集合对象的编码可以是intset或者hashtable。
+        - intset是一个整数集合，里面存的为某种同一类型的整数，支持如下三种长度的整数：
+        ```text
+        #define INTSET_ENC_INT16 (sizeof(int16_t))  
+        #define INTSET_ENC_INT32 (sizeof(int32_t))  
+        #define INTSET_ENC_INT64 (sizeof(int64_t))
+        ```
+        - intset是一个有序集合，查找元素的复杂度为O(logN)，但插入时不一定为O(logN)，因为有可能涉及到升级操作。比如当集合里全是int16_t型的整数，这时要插入一个int32_t，那么为了维持集合中数据类型的一致，那么所有的数据都会被转换成int32_t类型，涉及到内存的重新分配，这时插入的复杂度就为O(N)了。是intset不支持降级操作。
 
 - 有序集合 Sorted Set ZSet
     - 常用命令： zadd, zrange, zrem, zcard
     - 描述： 和set相比，sorted set增加了一个权重参数score，使得集合中的元素能够按score进行有序排列。
     - 场景： 在直播系统中，实时排行信息包含直播间在线用户列表，各种礼物排行榜，弹幕消息（可以理解为按消息维度的消息排行榜）等信息，适合使用 Redis 中的 Sorted Set 结构进行存储。
-
-
+    - 底层实现： 有序集合的编码可能两种，一种是ziplist，另一种是skiplist与dict的结合。
+        - ziplist作为集合和作为哈希对象是一样的，member和score顺序存放。按照score从小到大顺序排列。它的结构不再复述。
+        - skiplist是一种跳跃表，它实现了有序集合中的快速查找，在大多数情况下它的速度都可以和平衡树差不多。但它的实现比较简单，可以作为平衡树的替代品。它的结构比较特殊。
+        - 为什么要用这种结构呢。试想如果单一用hashtable，那可以快速查找、添加和删除元素，但没法保持集合的有序性。如果单一用skiplist，有序性可以得到保障，但查找的速度太慢O（logN），hashtable用于查找。
 
 ### Redis设置过期时间
 语法：redis.expire(key, expiration)
@@ -164,64 +185,26 @@ Redis提供了6中数据淘汰策略。
 - [Redis 的哨兵机制](Redis-Sentinel.md)
 - [Redis 的集群部署](Redis-Cluster.md)
 - [RedLock 分布式锁](Redis-RedLock.md)
+- [Redis 事务](Redis-Transaction.md)
+- [Redis 缓存](Redis-Cache.md)
 - [Java使用RedisTemplate](Redis-Template.md)
+- 《Redis实战》
 
 
-
----
-
-未完
-
-### redis 事务
-
-Redis 通过 MULTI、EXEC、WATCH 等命令来实现事务(transaction)功能。事务提供了一种将多个命令请求打包，然后一次性、按顺序地执行多个命令的机制，并且在事务执行期间，服务器不会中断事务而改去执行其他客户端的命令请求，它会将事务中的所有命令都执行完毕，然后才去处理其他客户端的命令请求。
-
-在传统的关系式数据库中，常常用 ACID 性质来检验事务功能的可靠性和安全性。在 Redis 中，事务总是具有原子性（Atomicity）、一致性（Consistency）和隔离性（Isolation），并且当 Redis 运行在某种特定的持久化模式下时，事务也具有持久性（Durability）。
-
-### 缓存雪崩和缓存穿透问题解决方案
-
-**缓存雪崩** 
-
-简介：缓存同一时间大面积的失效，所以，后面的请求都会落到数据库上，造成数据库短时间内承受大量请求而崩掉。
-
-解决办法（中华石杉老师在他的视频中提到过，视频地址在最后一个问题中有提到）：
-
-- 事前：尽量保证整个 redis 集群的高可用性，发现机器宕机尽快补上。选择合适的内存淘汰策略。
-- 事中：本地ehcache缓存 + hystrix限流&降级，避免MySQL崩掉
-- 事后：利用 redis 持久化机制保存的数据尽快恢复缓存
-
-![](http://my-blog-to-use.oss-cn-beijing.aliyuncs.com/18-9-25/6078367.jpg)
-
-
-**缓存穿透** 
-
-简介：一般是黑客故意去请求缓存中不存在的数据，导致所有的请求都落到数据库上，造成数据库短时间内承受大量请求而崩掉。
-
-解决办法： 有很多种方法可以有效地解决缓存穿透问题，最常见的则是采用布隆过滤器，将所有可能存在的数据哈希到一个足够大的bitmap中，一个一定不存在的数据会被 这个bitmap拦截掉，从而避免了对底层存储系统的查询压力。另外也有一个更为简单粗暴的方法（我们采用的就是这种），如果一个查询返回的数据为空（不管是数 据不存在，还是系统故障），我们仍然把这个空结果进行缓存，但它的过期时间会很短，最长不超过五分钟。
-
-参考：
-
-- [https://blog.csdn.net/zeb_perfect/article/details/54135506](https://blog.csdn.net/zeb_perfect/article/details/54135506)
-
-### 如何解决 Redis 的并发竞争 Key 问题
-
-所谓 Redis 的并发竞争 Key 的问题也就是多个系统同时对一个 key 进行操作，但是最后执行的顺序和我们期望的顺序不同，这样也就导致了结果的不同！
-
-推荐一种方案：分布式锁（zookeeper 和 redis 都可以实现分布式锁）。（如果不存在 Redis 的并发竞争 Key 问题，不要使用分布式锁，这样会影响性能）
-
-基于zookeeper临时有序节点可以实现的分布式锁。大致思想为：每个客户端对某个方法加锁时，在zookeeper上的与该方法对应的指定节点的目录下，生成一个唯一的瞬时有序节点。 判断是否获取锁的方式很简单，只需要判断有序节点中序号最小的一个。 当释放锁的时候，只需将这个瞬时节点删除即可。同时，其可以避免服务宕机导致的锁无法释放，而产生的死锁问题。完成业务流程后，删除对应的子节点释放锁。
-
-在实践中，当然是从以可靠性为主。所以首推Zookeeper。
-
-参考：
-
-- https://www.jianshu.com/p/8bddd381de06
-
-### 如何保证缓存与数据库双写时的数据一致性?
-
-你只要用缓存，就可能会涉及到缓存与数据库双存储双写，你只要是双写，就一定会有数据一致性的问题，那么你如何解决一致性问题？
-
-一般来说，就是如果你的系统不是严格要求缓存+数据库必须一致性的话，缓存可以稍微的跟数据库偶尔有不一致的情况，最好不要做这个方案，读请求和写请求串行化，串到一个内存队列里去，这样就可以保证一定不会出现不一致的情况
-
-串行化之后，就会导致系统的吞吐量会大幅度的降低，用比正常情况下多几倍的机器去支撑线上的一个请求。
-
+## Redis常见面试题
+- [redis 简介](#Redis简介)
+- [为什么要用 redis/为什么要用缓存](#为什么要用Redis)
+- [为什么要用 redis 而不用 map/guava 做缓存?](#为什么不用map做缓存)
+- [redis 和 memcached 的区别](#Redis和Memcached的区别)
+- [redis 常见数据结构以及使用场景分析](#Redis的数据类型)
+    - String
+    - Hash
+    - List
+    - Set
+    - Sorted Set
+- [redis 设置过期时间](#Redis设置过期时间)
+- [redis 内存淘汰机制(MySQL里有2000w数据，Redis中只存20w的数据，如何保证Redis中的数据都是热点数据?)](#Redis数据淘汰机制)
+- [redis 持久化机制/存储策略(怎么保证 redis 挂掉之后再重启数据可以进行恢复)](Redis-Persistence.md)
+- [缓存雪崩和缓存穿透问题解决方案](Redis-Cache.md)
+- [如何解决 Redis 的并发竞争 Key 问题](Redis-Concurrent.md)
+- [如何保证缓存与数据库双写时的数据一致性?](Redis-Cache.md)

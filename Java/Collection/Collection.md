@@ -6,20 +6,20 @@
 ```text
 Collection 存储Value
 |-- List 接口：有序集合，可以包含重复元素，可以按索引访问
-    |-- ArrayList   数组，非线程安全
-    |-- Vector  数组，线程安全，synchronize同步，性能较差。
-    |-- LinkedList 双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环)，非线程安全
+    |-- ArrayList 底层使用数组，非线程安全，扩容每次对size增加50%
+    |-- Vector 底层使用数组，线程安全，synchronize同步，性能较差。
+    |-- LinkedList 底层使用双向链表(JDK1.6之前为循环链表，JDK1.7取消了循环)，非线程安全
 |-- Set 接口：无序集合，不允许重复元素，根据equals和hashcode来判断唯一。
-    |-- HashSet 数组+链表，非线程安全，基于HashMap实现。
-    |-- LinkedHashSet 基于LinkedHashMap实现
-    |-- TreeSet 有序，红黑树，非线程安全
+    |-- HashSet 底层使用数组+链表，非线程安全，基于HashMap实现。
+    |-- LinkedHashSet 底层使用数组+链表，基于LinkedHashMap实现
+    |-- TreeSet 底层使用红黑树，有序（默认升序），非线程安全
 
 Map 接口：存储键值对 Key-Value，Key不允许重复。
-|-- HashMap 数组+链表/红黑树，非线程安全
-|-- TreeMap 非线程安全，根据key排序，默认升序。
-|-- HashTable 线程安全，继承Dictionary，Key/Value不允许为null。
-|-- LinkedHashMap 有序，非线程安全
-|-- ConcurrentHashMap 数组+链表/红黑树，线程安全，无序
+|-- HashMap 底层使用数组+链表/红黑树，非线程安全，Key/Value允许为null
+|-- TreeMap 底层使用红黑树，非线程安全，根据key排序，默认升序。
+|-- HashTable 底层使用数组+链表，线程安全，继承Dictionary，Key/Value不允许为null。
+|-- LinkedHashMap 继承自HashMap，增加了双向链表，保存了记录的插入顺序，非线程安全
+|-- ConcurrentHashMap 底层使用数组+链表/红黑树，线程安全，无序
 
 ```
 
