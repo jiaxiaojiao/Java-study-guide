@@ -12,6 +12,7 @@
 >Lombok 是一种 Java™ 实用工具。
  通过简单注解来精简代码达到消除冗长代码的目的，尤其是对于简单的 Java 对象（POJO）。
  
+ 
 > Lombok 采取的注解形式的，在编译后，自动生成相应的方法
 ## 步骤
 - 添加依赖
@@ -198,7 +199,7 @@ public void foo() {
 
 > 首先是项目的源代码文件，在经过编译处理以后，lombok会使用自己的抽象语法树去进行注解的匹配，如果在项目中的某一个类中使用了lombok中的注解，那么注解编译器就会自动去匹配项目中的注解对应到在lombok语法树中的注解文件，并经过自动编译匹配来生成对应类中的getter或者setter方法，达到简化代码的目的。执行顺序就如上图的叠放顺序。
 
-![Lombok运行原理](../image/lombok.png)
+![Lombok运行原理](../images/lombok.png)
 
 ## 注意
 ```text
@@ -209,4 +210,17 @@ public void foo() {
     使用@Slf4j还是@Log4j看项目使用的日志框架
     
     选择适合的地方使用Lombok，例如POJO是一个好地方，因为他很单纯
+```
+
+
+## 其他
+参考：
+```text
+https://projectlombok.org/features/
+
+https://github.com/rzwitserloot/lombok?spm=a2c4e.11153940.blogcont59972.5.2aeb6d32hayLHv
+
+https://www.zhihu.com/question/42348457
+
+https://blog.csdn.net/ghsau/article/details/52334762
 ```

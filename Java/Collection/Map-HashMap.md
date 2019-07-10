@@ -15,7 +15,7 @@
 3. 末尾插入。
 4. 效率高
 
-![image](image/map-hashmap-1.png)
+![image](images/map-hashmap-1.png)
 
 
 
@@ -157,15 +157,15 @@ final Node<K,V> getNode(int hash, Object key) {
 
 HashTable 
 
-![image](image/Map-HashTable-1.jpg)
+![image](images/Map-HashTable-1.jpg)
 
 JDK1.7的ConcurrentHashMap
 
-![image](image/Map-ConcurrentHashMap-1.png)
+![image](images/Map-ConcurrentHashMap-1.png)
 
 JDK1.8的ConcurrentHashMap（TreeBin: 红黑二叉树节点 Node: 链表节点）
 
-![image](image/Map-ConcurrentHashMap-2.png)
+![image](images/Map-ConcurrentHashMap-2.png)
 
    
 - **HashMap 和 Hashtable 的区别**

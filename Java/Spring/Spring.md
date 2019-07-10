@@ -20,9 +20,11 @@
 ## SpringMVC 
 分离了控制器，模型对象，分派器以及处理程序对象的角色。
 
+Spring MVC基于Spring框架、Servlet和JSP（JavaServer Page）
+
 #### Spring MVC原理
 
-![image](image/springmvc-1.png)
+![image](images/springmvc-1.png)
 
 ## [Spring Boot](Spring-Boot.md)
 简单易用，轻松上手，其中注解会给使用者提供方便。
@@ -50,6 +52,40 @@ Spring最初利用“工厂模式” 和代理模式解耦应用组件。大家�
 
 Spring MVC => Spring => Spring Boot  => Spring Cloud
 
+## Spring 的历史
+[Spring 框架的历史](https://www.quickprogrammingtips.com/spring-boot/history-of-spring-framework-and-spring-boot.html)
+
+ ![image](images/springhistoryinfographic.jpg)
+ 
+
+## Spring 5概述
+## Spring 5 Framework体系结构
+## Spring5 环境搭建
+
+IOC
+- 容器基本实现和组成
+- 装配Bean的方式： xml ，注解，JavaConfig
+- BeanFactory源码分析
+- BeanDefinition源码分析
+- Bean生命周期
+- 依赖实现
+
+AOP
+- 面向切面的基础：动态代理，Spring对AOP的支持（注解，xml）
+- AOP源码分析：ProxyFactory源码解析，AOPProxy源码解析（JDKDynamicAOPProxy，Cglib2AOPProxy），拦截与织入（advice源码分析，Interceptor源码分析）
+- Transaction事务分析：事务的基础，Spring对事务的支持，源码分析
+- Spring Cache框架源码分析
+
+
+#### spring里面有哪些你熟悉的设计模式，你怎么理解和应用的
+
+- Spring的发展背景简介
+- Spring IOC/DI 深入剖析
+- Spring IOC容器设计原理及高级特性
+- Spring AOP设计原理及实践
+- Spring JDBC设计原理及手写实现
+- Spring MVC架构设计原理及手写实现
+- Struts2与Spring MVC的比较 
 
 ## 其他
 ```text

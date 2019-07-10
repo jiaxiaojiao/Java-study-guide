@@ -1,6 +1,6 @@
 # 集合
 
-![image](image/collection.png)
+![image](images/collection.png)
 
 
 ```text
